@@ -1,0 +1,205 @@
+<mat-spinner [diameter]="30" class="m-auto" *ngIf="isGettingProfileDetails"></mat-spinner>
+<div class="sl-tab sl-profileSetting" *ngIf="!isGettingProfileDetails">
+    <mat-horizontal-stepper labelPosition="bottom" #stepper>
+        <!-- #enddocregion label-position -->
+        <mat-step label="Company details">
+            <div class="sl-dashboardbox__content">
+                <form class="sl-form sl-manageServices" [formGroup]="companyDetailsForm">
+                    <fieldset>
+                        <div class="sl-form__wrap">
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="companyName" type="text" placeholder="Company name*">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="gstNumber" type="text" placeholder="Gst Number">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="address" type="text" placeholder="Address*">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="whatsappNum" type="text" placeholder="whatsApp Number">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="websiteLink" type="text" placeholder="Website Url">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <select class="form-control sl-form-control" formControlName="location" type="text">
+                                    <option value="none">Select location*</option>
+                                    <option value="{{location.district}}" *ngFor="let location of locations">{{location.district}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control sl-form-control" formControlName="about" type="text" placeholder="About*"></textarea>
+                            </div>
+                            <div class="form-group sl-profileSetting__socialmedia">
+                                <label class="sl-input-group sl-facebook">
+                                        <a class="sl-prepend" href="javascript:void(0);"><i class="fab fa-facebook-f"></i></a>
+                                        <input class="form-control sl-form-control sl-append" formControlName="fbLink" type="text" placeholder="Add Facebook Link">
+                                </label>
+                            </div>
+                            <div class="form-group sl-profileSetting__socialmedia">
+                                <label class="sl-input-group sl-youtube">
+                                        <a class="sl-prepend" href="javascript:void(0);"><i class="fab fa-youtube"></i></a>
+                                        <input class="form-control sl-form-control sl-append" formControlName="youtubeLink" type="text" placeholder="Add Youtube Link">
+                                </label>
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" type="text" (input)="setLat()" formControlName="latitude" placeholder="Longitude*">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" type="text" (input)="setLng()" formControlName="longitude" placeholder="Latitude*">
+                            </div>
+                            <div class="form-group">
+                                <div class="sl-profileSetting__map">
+                                    <agm-map [latitude]='latitude' [longitude]='longitude' (mapClick)="setLocation($event)">
+                                        <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)">
+                                        </agm-marker>
+                                    </agm-map>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isSavingDetails"></mat-spinner>
+            <div fxLayout="row" fxLayoutAlign="space-between" *ngIf="!isSavingDetails">
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-active" (click)="companyFormSubmit()">Save</button>
+                </span>
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-outline" matStepperNext>Next</button>
+                </span>
+            </div>
+        </mat-step>
+        <mat-step label="Category and location">
+            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isGettingServiceAndLocationDetails"></mat-spinner>
+            <div class="sl-dashboardbox__content" *ngIf="!isGettingServiceAndLocationDetails">
+                <form class="sl-form sl-manageServices" [formGroup]="categoryAndLocationsForm">
+                    <fieldset>
+                        <div class="sl-form__wrap">
+                            <h3>{{categoryName}}</h3>
+                            <br><br><br>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Services</mat-label>
+                                <mat-select formControlName="subCategories" multiple>
+                                    <mat-option value="{{subCategory.subCategoryName}}" *ngFor="let subCategory of subCategories">{{subCategory.subCategoryName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Preferred location</mat-label>
+                                <mat-select formControlName="preferredLocations" multiple>
+                                    <mat-option value="{{location.district}}" *ngFor="let location of locations">{{location.district}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isSavingServiceAndLocation"></mat-spinner>
+            <div fxLayout="row" fxLayoutAlign="space-between" *ngIf="!isSavingServiceAndLocation">
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-outline" matStepperPrevious>Previous</button>
+                </span>
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-active" *ngIf="!isGettingServiceAndLocationDetails" (click)="categoryAndLocationFormSubmit()">Save</button>
+                </span>
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-outline" matStepperNext>Next</button>
+                </span>
+            </div>
+        </mat-step>
+        <mat-step label="Change password">
+            <div class="sl-dashboardbox__content">
+                <form class="sl-form sl-manageServices" [formGroup]="changePasswordForm">
+                    <fieldset>
+                        <div class="sl-form__wrap">
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="password" type="password" placeholder="New password*">
+                            </div>
+                            <div class="form-group form-group-half">
+                                <input class="form-control sl-form-control" formControlName="repassword" type="password" placeholder="Retype password*">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isChanging"></mat-spinner>
+            <div fxLayout="row" fxLayoutAlign="space-between" *ngIf="!isChanging">
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-outline" matStepperPrevious>Previous</button>
+                </span>
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-active" *ngIf="!isChanging" (click)="changePassword()">Change</button>
+                </span>
+                <span matRipple [matRippleColor]="color">
+                <button class="btn sl-btn sl-btn-outline" matStepperNext>Next</button>
+                </span>
+            </div>
+        </mat-step>
+        <mat-step label="Photos and gallery" state="done">
+            <div class="sl-dashboardbox__content">
+                <form class="sl-form sl-manageServices">
+                    <fieldset>
+                        <div class="sl-form__wrap">
+                            <div class="form-group mn-uploader">
+                                <input class="form-control sl-form-control" (change)="onProfileSelect($event)" type="file" hidden #profileFileInput accept="image/*">
+                                <div matRipple [matRippleColor]="color">
+                                    <button class="btn sl-btn sl-btn-active" (click)="profileFileInput.click()">Choose profile&nbsp;{{profileProgress==0?'':profileProgress+'%'}}</button>
+                                </div>
+                                <img *ngFor='let url of profilePreview' [src]="url" height="150" width="200px" style="margin: 3px;border-radius: 4px;"> <br *ngIf="profilePreview.length" />
+                                <mat-progress-bar mode="determinate" *ngIf="profileProgress!=0" [value]="profileProgress"></mat-progress-bar>
+                            </div>
+                            <div class="form-group mn-uploader">
+                                <input class="form-control sl-form-control" (change)="onLogoSelect($event)" type="file" hidden #logoFileInput accept="image/*">
+                                <div matRipple [matRippleColor]="color">
+                                    <button class="btn sl-btn sl-btn-active" (click)="logoFileInput.click()">Choose logo&nbsp;{{logoProgress==0?'':logoProgress+'%'}}</button>
+                                </div>
+                                <img *ngFor='let url of logoPreview' [src]="url" height="150" width="200px" style="margin: 3px;border-radius: 4px;"> <br *ngIf="logoPreview.length" />
+                                <mat-progress-bar mode="determinate" *ngIf="logoProgress!=0" [value]="logoProgress"></mat-progress-bar>
+                            </div>
+                            <div class="form-group mn-uploader">
+                                <input class="form-control sl-form-control" (change)="onBrochureSelect($event)" type="file" hidden #brochureFileInput accept="application/pdf,application/msword,
+                                application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                                <div matRipple [matRippleColor]="color">
+                                    <button class="btn sl-btn sl-btn-active" (click)="brochureFileInput.click()">Choose brochure&nbsp;{{brochureProgress==0?'':brochureProgress+'%'}}</button>
+                                </div>
+                                <p>{{brochureFilename}}</p>
+                                <mat-progress-bar mode="determinate" *ngIf="brochureProgress!=0" [value]="brochureProgress"></mat-progress-bar>
+                            </div>
+                            <div class="form-group mn-uploader">
+                                <input class="form-control sl-form-control" (change)="onGallerySelect($event)" type="file" hidden #galleryFileInput multiple accept="image/*">
+                                <div matRipple [matRippleColor]="color">
+                                    <button class="btn sl-btn sl-btn-active" (click)="galleryFileInput.click()">Choose gallery&nbsp;{{galleryProgress==0?'':galleryProgress+'%'}}</button>
+                                </div>
+                                <mat-hint>max {{galleryMaxCount}}</mat-hint><br>
+                                <mat-progress-bar mode="determinate" *ngIf="galleryProgress!=0" [value]="galleryProgress"></mat-progress-bar>
+                            </div>
+                            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isGettingGalleryDetails"></mat-spinner>
+                            <div class="form-group" *ngIf="!isGettingGalleryDetails">
+                                <div class="sl-galleryTab__gallery">
+                                    <div class="sl-row">
+                                        <div class="sl-col-1-of-2 sl-col-md-1-of-3 sl-col-xl-1-of-4" *ngFor='let url of existingGallery'>
+                                            <figure class="sl-galleryTab__gallery--item">
+                                                <img src="https://mynestonline.com/collection/images/gallery/{{url}}" alt="Image Description" height="150" width="200px">
+                                                <a class="sl-deleteImg" href="javascript:void(0);" (click)=deleteGalleryImage(url)><i class="fas fa-times"></i>Delete</a>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isUploading"></mat-spinner>
+            <div fxLayout="row" fxLayoutAlign="space-between" *ngIf="!isUploading">
+                <span matRipple [matRippleColor]="color">
+                 <button class="btn sl-btn sl-btn-outline" matStepperPrevious>Previous</button>
+                </span>
+                <span matRipple [matRippleColor]="color">
+                    <button class="btn sl-btn sl-btn-active" routerLink="/dashboard">Dashboard</button>
+                </span>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Email Verification</h1>
+<mat-dialog-content class="mat-typography">
+    <div class="form-group" *ngIf="!isProcessing">
+        <input class="form-control sl-form-control" [formControl]="otp" type="text" placeholder="OTP*">
+        <p *ngIf="isCounting" class="text-center">Resend OTP in {{counter | formatTime}}</p>
+        <p *ngIf="!isCounting" class="text-center"><a href="javascript:void(0)" (click)="sendOTP()">Resend</a></p>
+    </div>
+    <p class="text-center">{{info}}</p>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isProcessing"></mat-spinner>
+    <div matRipple [matRippleColor]="color" *ngIf="!isProcessing">
+        <button mat-button mat-dialog-close class="btn sl-btn sl-btn-active" [mat-dialog-close]="false">Cancel</button>
+    </div>
+    <div class="ml-2" matRipple [matRippleColor]="color" *ngIf="!isProcessing">
+        <button mat-button (click)="verifyOTP()" class="btn sl-btn sl-btn-outline">Verify</button>
+    </div>
+</mat-dialog-actions>

@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Send quote as a file</h1>
+<mat-dialog-content class="mat-typography">
+    <div class="form-group mn-uploader" fxLayout="column">
+        <input class="form-control sl-form-control" (change)="onQuoteSelect($event,quoteFileInput)" type="file" hidden #quoteFileInput accept="application/pdf,application/msword,
+        application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        <span matRipple [matRippleColor]="color">
+        <button [disabled]="isSending" class="btn sl-btn sl-btn-active" (click)="quoteFileInput.click()">Choose quote</button>
+        </span>
+        <p *ngIf="quoteFile">{{quoteFilename}}</p>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isSending"></mat-spinner>
+    <div matRipple [matRippleColor]="color" *ngIf="!isSending">
+        <button mat-button mat-dialog-close class="btn sl-btn sl-btn-active" [mat-dialog-close]="false">Cancel</button>
+    </div>
+    <div class="ml-3" matRipple [matRippleColor]="color" *ngIf="!isSending">
+        <button mat-button (click)="sendQuote()" class="btn sl-btn sl-btn-outline">Send</button>
+    </div>
+</mat-dialog-actions>

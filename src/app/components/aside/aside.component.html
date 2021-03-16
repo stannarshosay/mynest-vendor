@@ -1,0 +1,73 @@
+<aside id="sl-asidebar" class="sl-asidebar">
+    <div class="sl-asideholder sl-dashboardAsideholder">
+        <a href="javascript:void(0);" id="sl-closeasidebar" class="sl-closeasidebar">
+            <i class="lnr lnr-layers"></i>
+        </a>
+        <div class="sl-asidescrollbar">
+            <div id="sl-sidebarwrapper" class="sl-sidebarwrapper">
+                <div class="sl-usersinfo">
+                    <div class="single-chart">
+                        <svg viewBox="0 0 36 36" class="circular-chart orange">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    <path class="circle"
+                                    stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                        <figure class="sl-userprofileimg">
+                            <img style="width:96px;height:96px" *ngIf="vendorDetails" src="https://mynestonline.com/collection/images/company-logo/{{getImagePath(vendorDetails.logo)}}" alt="img description">
+                        </figure>
+                        <!-- <span class="sl-percentage">80% Profile Completed</span> -->
+                    </div>
+                    <div class="sl-title" *ngIf="vendorDetails">
+                        <div class="sl-slider__tags">
+                            <span class="sl-bg-gold" *ngIf="vendorDetails.premium">Premium</span><span *ngIf="vendorDetails.verified" class="sl-bg-green">Verified</span>
+                        </div>
+                        <h3><a href="javascript:void(0);">{{vendorDetails.companyName}}</a></h3>
+                    </div>
+                </div>
+                <nav id="sl-navdashboard" class="sl-navdashboard">
+                    <ul>
+                        <li routerLinkActive="sl-active">
+                            <a routerLink="dashboard">
+                                <i class="ti-dashboard"></i><span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="sl-active">
+                            <a href="javascript:void(0)" routerLink="profile-settings">
+                                <i class="ti-user"></i><span>Profile Settings</span>
+                            </a>
+                        </li>
+                        <li class="menu-item-has-children page_item_has_children" routerLinkActive="sl-active">
+                            <a href="javascript:void(0);" class="sl-notification">
+                                <i class="ti-announcement"></i><span>Advertisements</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li><a href="javascript:void(0);" routerLink="my-advertisements">My Advertisements</a></li>
+                                <li><a href="javascript:void(0);" routerLink="advertise">Create Ad</a></li>
+                            </ul>
+                        </li>
+                        <li routerLinkActive="sl-active">
+                            <a href="javascript:void(0)" routerLink="/requirements">
+                                <i class="ti-clipboard"></i><span>Requirements</span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="sl-active">
+                            <a href="javascript:void(0)" routerLink="/packages">
+                                <i class="ti-package"></i><span>Packages</span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="sl-active">
+                            <a href="javascript:void(0)" routerLink="/notifications">
+                                <i class="ti-bell"></i><span>Notifications</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="logout()">
+                                <i class="ti-power-off"></i><span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</aside>

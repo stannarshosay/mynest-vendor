@@ -1,0 +1,72 @@
+<main class="sl-main">
+    <div class="sl-registerfixed">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="sl-register-holder">
+                        <div class="sl-registerarea">
+                            <div class="sl-registersignarea">
+                                <div class="sl-registersignarea__title">
+                                    <h3>Service Provider Login</h3>
+                                </div>
+                                <div class="tab-pane fade show active" id="signupprovider" role="tabpanel" aria-labelledby="sl-signupprovider">
+                                    <form class="sl-formtheme sl-signupform" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                                        <fieldset>
+                                            <div class="sl-signupform-wrap">
+                                                <div class="form-group">
+                                                    <input type="text" formControlName="username" name="name" value="" class="form-control sl-form-control" placeholder="Username*" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" formControlName="password" name="password" value="" class="form-control sl-form-control" placeholder="Password*">
+                                                </div>
+                                                <div class="form-group sl-btnarea">
+                                                    <mat-spinner [diameter]="30" class="m-auto" [hidden]="!showSpinner"></mat-spinner>
+                                                    <div matRipple [matRippleColor]="color">
+                                                        <button type="submit" class="btn sl-btn sl-btn-outline" [hidden]="showSpinner">Login</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <div class="sl-oroption">
+                                    <span>or</span>
+                                </div>
+                                <div class="sl-loginicon">
+                                    <ul>
+                                        <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" class="sl-facebookbox"><i class="fab fa-facebook-f"></i>via facebook</a></li>
+                                        <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" class="sl-googlebox"><i class="fab fa-google"></i>via google</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="sl-popup-footerterms">
+                                <span>By signing in  you agree to these <a href="legalprivacy.html"> Terms &amp; Conditions</a> &amp; consent to<a href="legalprivacy.html"> Cookie Policy &amp; Privacy Policy.</a></span>
+                            </div>
+                            <div class="sl-loginfooterinfo border-bottom" fxLayout="row nowrap" fxLayoutAlign="space-around center">
+                                <a href="javascript:void(0);" routerLink="/signup" fxFlex="50"><em>Not a member?</em> Signup Now</a>
+                                <a href="javascript:void(0);" fxFlex="50" class="sl-forgot-password" (click)="forgotPassword()">Forgot password?</a>
+                            </div>
+                        </div>
+                        <div class="sl-registercontent">
+                            <figure class="sl-registercontent__img">
+                                <img src="assets/images/register/img-01.jpg" alt="img">
+                                <figcaption>
+                                    <strong class="sl-registerlogo">
+                                        <a href="index.html"><img src="assets/images/main-logo.png" alt="Images Description" style="width:100px"></a>
+                                    </strong>
+                                    <div class="sl-registertitle">
+                                        <h4>We’re Spreading Day by Day</h4>
+                                        <h2>Join Our Growing Team</h2>
+                                    </div>
+                                    <div class="sl-descritpion">
+                                        <p>Consectetur adipisicing elit sed dotiane eiusmod tempor incididunt utna labore etnalorale magna aliqua enim adman minim veniam quis nostrud exerciteon ullamco.</p>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

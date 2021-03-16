@@ -1,0 +1,154 @@
+<!-- HEADER START -->
+<header>
+    <div class="sl-main-header">
+        <strong class="sl-main-header__logo">
+             <a href="https://mynestonline.com/vendor"><img src="assets/images/main-logo.png" alt="Logo"></a>
+          </strong>
+        <div class="sl-main-header__content">
+            <div class="sl-main-header__upper sl-navbar-search" fxLayout="row nowrap" fxLayoutAlign="space-between">
+                <div class="mn-upgrade-plan" fxLayout="row nowrap" fxLayoutAlign="space-between center">
+                    <div class="mn-content">
+                        <p>upgrade now to be our</p>
+                        <h6>Premium Member</h6>
+                    </div>
+                    <button type="button" routerLink="/packages" class="upgrade-plan-btn">Upgrade</button>
+                </div>
+                <img class="announcement-img" src="assets/images/megaphone.png" *ngIf="isGettingAnnouncements">
+                <div class="mn-announcements" fxFlex="50" fxLayout="row" fxLayoutAlign="center center" *ngIf="isGettingAnnouncements">
+                    <owl-carousel-o [options]="announcementOptions" id="slAnnouncementCarousel" class="sl-owl-nav">
+                        <ng-template carouselSlide *ngFor="let announcement of announcements">
+                            <marquee>{{announcement.message}}</marquee>
+                        </ng-template>
+                    </owl-carousel-o>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                    <div class="sl-topbar-notify">
+                        <div class="sl-topbar-notify__icons dropdown sl-dropdown">
+                            <a href="javascript:void(0);" class="sl-topbar-notify__anchor" id="slMessages" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" matRipple [matRippleColor]="darkColor">
+                                <i class="ti-comment-alt"></i>
+                                <span class="sl-topbar-notify__circle" *ngIf="messageCount">
+                                  <em class="sl-bg-green">{{messageCount}}</em>
+                              </span>
+                            </a>
+                            <div class="dropdown-menu sl-dropdown__cart" aria-labelledby="slCart">
+                                <h6>Messages</h6>
+                                <mat-spinner [diameter]="30" class="m-auto" [hidden]="isNavMessagesLoaded"></mat-spinner>
+                                <p *ngIf="(!navMessages)&&(isLoggedIn)&&(isNavMessagesLoaded)">No messages yet!</p>
+                                <ul *ngIf="navMessages">
+                                    <li *ngFor="let message of navMessages" (click)="goToChatroom(message)" matRipple [matRippleColor]="darkColor">
+                                        <img src="https://mynestonline.com/collection/images/customer-profile/{{getImagePath(message.profilePic)}}" style="width:40px;height:40px;" alt="Image Description">
+                                        <div class="sl-dropdown__cart__description fullwidth">
+                                            <a class="sl-cart-title" href="javascript:void(0);"><strong>{{message.customerName}}</strong></a>
+                                            <div class="pt-1" fxLayout="row" fxLayoutAlign="space-between">
+                                                <a class="sl-cart-title" href="javascript:void(0);"><em>{{checkLength(message.lastMessage)}}</em></a>
+                                                <a class="sl-cart-title" href="javascript:void(0);">{{message.lastMessageTime}}</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="sl-cart-footer">
+                                    <div class="sl-cart-footer__btn">
+                                        <div matRipple [matRippleColor]="color">
+                                            <a *ngIf="navMessages" class="btn sl-btn sl-btn-active" href="javascript:void(0);" routerLink="/dashboard">View All</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sl-topbar-notify__icons dropdown sl-dropdown">
+                            <a href="javascript:void(0);" class="sl-topbar-notify__anchor" id="slNotifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" matRipple [matRippleColor]="darkColor">
+                                <i class="ti-bell"></i>
+                                <span class="sl-topbar-notify__circle" *ngIf="notificationCount">
+                                  <em class="sl-bg-red-orange">{{notificationCount}}</em>
+                              </span>
+                            </a>
+                            <div class="dropdown-menu sl-dropdown__cart" aria-labelledby="slCart">
+                                <h6>Notifications</h6>
+                                <mat-spinner [diameter]="30" class="m-auto" [hidden]="isNavNotificationsLoaded"></mat-spinner>
+                                <p *ngIf="(!navNotifications)&&(isLoggedIn)&&(isNavNotificationsLoaded)">No notifications yet!</p>
+                                <ul *ngIf="navNotifications" class="mn-notifications">
+                                    <li [class.sl-unread-messages]="!message.readStatus" *ngFor="let message of navNotifications">
+                                        <div class="sl-dropdown__cart__description fullwidth">
+                                            <a class="sl-cart-title" href="javascript:void(0);">{{message.message}}</a>
+                                            <a class="sl-cart-title pt-2" href="javascript:void(0);"><strong>{{message.createdDate}}</strong></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="sl-cart-footer">
+                                    <div class="sl-cart-footer__btn">
+                                        <div matRipple [matRippleColor]="color">
+                                            <a *ngIf="navNotifications" class="btn sl-btn sl-btn-active" href="javascript:void(0);" routerLink="/notifications">View All</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sl-user sl-userdropdown">
+                        <a href="javascript:void(0);" matRipple [matRippleColor]="darkColor">
+                            <img style="width:40px;height:40px" src="https://mynestonline.com/collection/images/company-logo/{{getImagePath(vendorCompanyLogo)}}" alt="Image Description">
+                            <span class="sl-user__description"><em class="d-block">Hello!</em>{{vendorUsername}}</span>
+                            <i class="ti-angle-down"></i>
+                        </a>
+                        <ul class="sl-usermenu">
+                            <li>
+                                <a href="javascript:void(0)" routerLink="/signup" matRipple [matRippleColor]="color">
+                                    <i class="ti-user"></i><span>Profile Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" routerLink="/requirements" matRipple [matRippleColor]="color">
+                                    <i class="ti-clipboard"></i><span>Requirements</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" routerLink="/dashboard" matRipple [matRippleColor]="color">
+                                    <i class="ti-comment"></i><span>Messages</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" routerLink="/notifications" matRipple [matRippleColor]="color">
+                                    <i class="ti-bell"></i><span>Notifications</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" (click)="logout()" matRipple [matRippleColor]="color">
+                                    <i class="ti-power-off"></i><span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sl-main-header__lower">
+                <nav class="navbar-expand-lg">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#slMainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                          <i class="lnr lnr-menu"></i>
+                      </button>
+                    <div class="collapse navbar-collapse sl-navigation" id="slMainNavbar">
+                        <ul class="navbar-nav mr-auto sl-navbar-nav">
+                            <li class="nav-item" routerLinkActive="sl-navactive">
+                                <a class="nav-link" routerLink="/dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item" routerLinkActive="sl-navactive">
+                                <a class="nav-link" routerLink="/packages">Packages</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript:void(0)">FAQ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="mn-header-btns">
+                    <div class="sl-main-header__lower--btn" matRipple [matRippleColor]="color">
+                        <a href="javascript:void(0);" routerLink="/requirements" class="btn sl-btn sl-btn-active">Requirements</a>
+                    </div>
+                    <div class="sl-main-header__lower--btn" matRipple [matRippleColor]="color">
+                        <a href="javascript:void(0);" routerLink="/advertise" class="btn sl-btn sl-btn-outline">Advertise</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- HEADER END -->

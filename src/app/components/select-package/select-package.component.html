@@ -1,0 +1,57 @@
+<section class="sl-main-section">
+    <div class="logout-fullpage">
+        <button (click)="logout()" mat-icon-button class="btn sl-btn sl-btn-outline"><mat-icon>logout</mat-icon>Logout</button>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-xl-8">
+                <div class="sl-sectionHead">
+                    <div class="sl-sectionHead__title sl-below-line sl-below-line__active">
+                        <h2>Select Package</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sl-packagePlan">
+            <div class="row">
+                <mat-spinner [diameter]="30" class="m-auto" [hidden]="showSpinner"></mat-spinner>
+                <div class="col-md-6 col-xl-4" *ngFor="let package of packages">
+                    <div class="sl-package">
+                        <div class="sl-package__title">
+                            <img src="assets/images/index/packages/{{package.membershipName}}.png" alt="Image Description">
+                            <h3>{{package.membershipName}} Package</h3>
+                            <em>{{package.duration}} Days</em>
+                        </div>
+                        <div class="sl-package__deal sl-bg-blue">
+                            <p><s>&#8377;{{package.price}}</s></p>
+                            <div class="sl-package__price">
+                                <h3><sup>&#8377;</sup>{{package.sellingPrice}}</h3>
+                                <p>\ Month</p>
+                            </div>
+                            <em>Includes all taxes*</em>
+                        </div>
+                        <div class="sl-package__footer">
+                            <ul class="sl-package__details">
+                                <!-- <li>
+                                    <p>No. Of Offer To Post</p>
+                                    <p>10</p>
+                                </li> -->
+                                <!-- <li>
+                                    <p>Free 07 Days Extension</p>
+                                    <p class="sl-red-orange"><i class="ti-na"></i></p>
+                                </li> -->
+                                <li *ngFor="let benefit of package.benefits.split(',')">
+                                    <p>{{benefit}}</p>
+                                    <p class="sl-green"><i class="ti-check"></i></p>
+                                </li>
+                            </ul>
+                            <div matRipple [matRippleColor]="color">
+                                <a href="javascript:void(0)" (click)="choosePackage(package)" [class.disabled]="(!package.active)||isProccessing" class="btn sl-btn sl-btn-outline">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

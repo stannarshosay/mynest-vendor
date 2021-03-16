@@ -1,0 +1,97 @@
+<div class="sl-profile-alerts">
+    <ul>
+        <li>
+            <div class="sl-alertsinfo">
+                <figure><img src="assets/images/insight/img-01.jpg" alt="img description"></figure>
+                <div class="sl-balanceheading">
+                    <h4>24 Unread</h4>
+                    <span>New Messages</span>
+                </div>
+            </div>
+        </li>
+        <!-- <li>
+            <div class="sl-alertsinfo">
+                <figure><img src="assets/images/insight/img-02.jpg" alt="img description"></figure>
+                <div class="sl-balanceheading">
+                    <h4>32,706</h4>
+                    <span>Profile Visits</span>
+                </div>
+            </div>
+        </li> -->
+        <li>
+            <div class="sl-alertsinfo">
+                <figure><img src="assets/images/insight/img-03.jpg" alt="img description"></figure>
+                <div class="sl-balanceheading">
+                    <h4>16 Days left</h4>
+                    <span>Package Expiry</span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="sl-alertsinfo">
+                <figure class="margin-reduced-five"><img src="assets/images/insight/like.jpg" alt="img description"></figure>
+                <div class="sl-balanceheading">
+                    <h4>2,706</h4>
+                    <span>Wishlisted</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="sl-dashboardbox sl-inbox">
+    <div class="sl-dashboardbox__content">
+        <div class="sl-inbox__user" [class.pt-5]="isGettingContacts">
+            <mat-spinner [diameter]="30" class="m-auto" *ngIf="isGettingContacts"></mat-spinner>
+            <p class="text-center pt-5" *ngIf="showNoContacts">No chat contacts yet!</p>
+            <ul class="sl-inbox__user--list sl-y-axis mCustomScrollbar">
+                <li *ngFor="let contact of contacts" (click)="loadChatroom(contact)" [class.sl-user-active]="contact.customerId == contactData.customerId">
+                    <img src="https://mynestonline.com/collection/images/customer-profile/{{getImagePath(contact.profilePic)}}" alt="Image Description">
+                    <div class="sl-inbox__user--text">
+                        <h5>{{contact.customerName}}</h5>
+                        <div fxLayout="column">
+                            <h6><em>{{checkLength(contact.lastMessage?contact.lastMessage:'No messages yet')}}</em></h6>
+                            <small>{{contact.lastMessageTime?contact.lastMessageTime:''}}</small>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="sl-messageUser">
+            <div class="sl-messageUser__heading" *ngIf="contacts.length">
+                <div class="sl-messageUser__heading--logo">
+                    <a href="javascript:void(0);" class="sl-messageUser__back"><i class="ti-arrow-left"></i></a>
+                    <img src="https://mynestonline.com/collection/images/customer-profile/{{getImagePath(contactData.profilePic)}}" alt="Image Description">
+                </div>
+                <div class="sl-messageUser--text">
+                    <h5>{{contactData.customerName}}</h5>
+                </div>
+            </div>
+            <div class="pt-5" *ngIf="isGettingMessages">
+                <mat-spinner [diameter]="30" class="m-auto"></mat-spinner>
+            </div>
+            <div class="no-message" *ngIf="showNoMessages">
+                <img src="assets/images/inbox/no-message.png">
+                <p class="text-center">No messages yet, start converstation!</p>
+            </div>
+            <div class="sl-messageUser__area sl-y-axis mCustomScrollbar" #chatbox>
+                <div [class.chat-quote]="message.messageType == 'FILE'" [class.sl-messageUser__area--left]="message.recipientId != vendorId" [class.sl-messageUser__area--right]="message.recipientId == vendorId" *ngFor="let message of messages">
+                    <p *ngIf="message.messageType == 'TEXT'">{{message.content}}</p>
+                    <p *ngIf="message.messageType == 'FILE'" matTooltip="click to download" (click)="downloadChatQuote(message.content)"><i class="ti-file"></i>&nbsp;&nbsp;{{message.content}}</p>
+                    <span>{{message.sentTime}}</span>
+                </div>
+            </div>
+            <div class="sl-emoji" *ngIf="contacts.length">
+                <div class="sl-input-group">
+                    <a href="javascript:void(0);" matTooltip="send quote" [class.disabled]="isUploading" (click)="quoteFileInput.click()" class="btn sl-btn sl-prepend">
+                        <i class="ti-export"></i>
+                    </a>
+                    <input (change)="onQuoteSelect($event)" type="file" hidden #quoteFileInput accept="application/pdf,application/msword,
+                    application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <input class="form-control sl-form-control sl-prepend" [formControl]="messageControl" type="text" placeholder="Type message here">
+                    <a href="javascript:void(0);" (click)="sendMessage()" class="btn sl-btn sl-btn-active sl-append"><i class="lnr lnr-arrow-right"></i></a>
+                </div>
+                <mat-progress-bar mode="determinate" *ngIf="quoteProgress!=0" [value]="quoteProgress"></mat-progress-bar>
+            </div>
+        </div>
+    </div>
+</div>

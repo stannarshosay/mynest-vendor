@@ -1,0 +1,52 @@
+<mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isGettingRequirements"></mat-spinner>
+<div *ngIf="!isGettingRequirementsSuccess" class="mn-no-results" fxLayout="column" fxLayoutAlign="center center">
+    <img src="assets/images/vendor/no-results.png">
+    <p>No requirements yet.</p>
+</div>
+<mat-accordion *ngIf="!isGettingRequirements">
+    <mat-expansion-panel *ngFor="let requirement of requirements | paginate:config">
+        <mat-expansion-panel-header>
+            <div class="sl-newAppointments__userDetail">
+                <div class="sl-newAppointments__userText">
+                    <h5>{{requirement.categoryId}}</h5>
+                    <p>{{requirement.createdDate}}</p>
+                </div>
+            </div>
+            <!-- <div class="sl-newAppointments__services">
+                <div class="sl-newAppointments__services--description">
+                    <h6>Preffered locations</h6>
+                    <ul>
+                        <li *ngFor="let loc of requirement.locations">
+                            <p>{{loc}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div> -->
+            <div matRipple [matRippleColor]="color">
+                <a href="javascript:void(0);" (click)="sendQuote(requirement.requirementId,$event)" class="btn sl-btn sl-btn-outline">Send quote</a>
+            </div>
+        </mat-expansion-panel-header>
+        <div class="requirement-content" fxLayout="row" fxLayoutAlign="start">
+            <img fxFlex="50" *ngIf="(requirement.picName)&&(requirement.picName.trim()!='')" src="https://mynestonline.com/collection/images/requirements/{{requirement.picName}}">
+            <div class="p-5" [attr.fxFlex]="((requirement.picName)&&(requirement.picName.trim()!=''))?50:100">
+                <div class="requirement-contact" fxLayout="row" fxLayoutAlign="center center" *ngIf="(requirement.contact)&&(requirement.contact!='')">
+                    <mat-icon>phone</mat-icon>
+                    <span class="ml-1">{{requirement.contact}}</span>
+                </div>
+                <p>&ldquo;{{requirement.description}}&rdquo;</p>
+            </div>
+        </div>
+        <mat-action-row>
+            <div matRipple [matRippleColor]="color">
+                <a href="javascript:void(0);" (click)="reportRequirement(requirement.requirementId)" class="btn sl-btn sl-btn-danger">Report</a>
+            </div>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+</mat-accordion>
+
+<div class="row">
+    <div class="col-12">
+        <pagination-controls (pageChange)="pageChange($event)" autoHide="true" responsive="true" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+</div>

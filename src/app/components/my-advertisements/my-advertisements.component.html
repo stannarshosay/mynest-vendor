@@ -1,0 +1,57 @@
+<mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isGettingSlots"></mat-spinner>
+<div *ngIf="!isGettingSlotsSuccess" class="mn-no-results" fxLayout="column" fxLayoutAlign="center center">
+    <img src="assets/images/vendor/no-results.png">
+    <p>No slots booked.</p>
+</div>
+<mat-accordion *ngIf="!isGettingSlots">
+    <mat-expansion-panel *ngFor="let slot of slots">
+        <mat-expansion-panel-header>
+            <div class="sl-newAppointments__userDetail">
+                <div class="sl-newAppointments__userText">
+                    <span class="vendor-slot {{slot.slotStatus}}">{{slot.slotStatus}}</span>
+                    <p><strong>{{slot.categoryName}}</strong></p>
+                    <p>{{slot.location}}</p>
+                </div>
+            </div>
+            <div class="sl-newAppointments__services">
+                <div class="sl-newAppointments__services--description">
+                    <h6>Booked Slot</h6>
+                    <ul>
+                        <li class="">
+                            <p class="booked-date-slots">{{slot.startingDate}} to {{slot.endingDate}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="slot.slotStatus == 'REQUESTED'">
+                <h5>To aprrove</h5>
+                <span class="text-muted">please wait</span>
+            </div>
+            <div *ngIf="slot.slotStatus == 'ACCEPTED'">
+                <h5>Starts on</h5>
+                <span class="text-muted">{{slot.startingDate}}</span>
+            </div>
+            <div *ngIf="slot.slotStatus == 'RUNNING'">
+                <h5>Ends on</h5>
+                <span class="text-muted">{{slot.endingDate}}</span>
+            </div>
+            <div *ngIf="slot.slotStatus == 'EXPIRED'">
+                <h5>Ended on</h5>
+                <span class="text-muted">{{slot.endingDate}}</span>
+            </div>
+            <div class="form-group mn-uploader" *ngIf="(slot.slotStatus == 'BOOKED')||(slot.slotStatus == 'REJECTED')">
+                <input class="form-control sl-form-control" (change)="onAdSelect($event,slot.vendorAdId)" type="file" hidden #adFileInput accept="image/*">
+                <div matRipple [matRippleColor]="color">
+                    <button class="btn sl-btn sl-btn-active" (click)="adFileInput.click()">Upload Ad&nbsp;{{adProgress==0?'':adId==slot.vendorAdId?adProgress+'%':''}}</button>
+                </div>
+                <mat-progress-bar mode="determinate" *ngIf="(adProgress!=0)&&(adId==slot.vendorAdId)" [value]="adProgress"></mat-progress-bar>
+            </div>
+        </mat-expansion-panel-header>
+        <div class="requirement-content" fxLayout="row" fxLayoutAlign="start">
+            <p class="text-danger" *ngIf="slot.slotStatus == 'REJECTED'">Please upload another ad image!</p>
+            <img fxFlex="50" *ngIf="(slot.adPicturePath)&&(slot.adPicturePath.trim()!='')" src="https://mynestonline.com/collection/images/vendor-advertisement/{{slot.adPicturePath}}">
+            <p class="text-danger" *ngIf="(!slot.adPicturePath)||(slot.adPicturePath.trim()=='')">Please upload ad image!</p>
+        </div>
+    </mat-expansion-panel>
+
+</mat-accordion>

@@ -1,0 +1,25 @@
+<div class="sl-dashboardbox">
+    <div class="sl-dashboardbox__title">
+        <h2>All Notifications</h2>
+    </div>
+    <div class="sl-dashboardbox__content sl-allnotification-holder">
+        <mat-spinner [diameter]="30" class="m-auto" [hidden]="isNotificationsLoaded"></mat-spinner>
+        <div *ngIf="!isNotificationsDataSuccess" class="mn-no-results" fxLayout="column" fxLayoutAlign="center center">
+            <img src="assets/images/vendor/no-results.png">
+            <p>No notifications yet!</p>
+        </div>
+        <ul class="sl-allnotification" *ngIf="notifications.length">
+            <li *ngFor="let message of notifications | paginate:config">
+                <div class="sl-notititle">
+                    <h4><a href="javascript:void(0);">{{message.createdDate}}</a></h4>
+                </div>
+                <div class="sl-notidescription">
+                    <p>{{message.message}}</p>
+                </div>
+            </li>
+        </ul>
+        <div class="col-12">
+            <pagination-controls (pageChange)="pageChange($event)" autoHide="true" responsive="true" previousLabel="" nextLabel=""></pagination-controls>
+        </div>
+    </div>
+</div>
