@@ -68,6 +68,9 @@ export class HeaderComponent implements OnInit {
       if(this.isLoggedIn){
         this.setMessageUnreadCount();
         this.setMessagesNav();
+      }else{
+        this.isNavMessagesLoaded = true;
+        this.navMessages = "";
       }
     });
     this.getRecievedNotificationsSubscription = this.chatService.getRecievedNotification().subscribe(res =>{
@@ -76,6 +79,9 @@ export class HeaderComponent implements OnInit {
       if(this.isLoggedIn){
         this.setNotificationUnreadCount();
         this.setNotificationsNav();
+      }else{
+        this.isNavNotificationsLoaded = true;
+        this.navNotifications = "";
       }
     });
     if(this.isLoggedIn){
