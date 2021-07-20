@@ -1,0 +1,7 @@
+.sl-notititle.read h4:before {
+    background-color: grey;
+}
+
+.sl-allnotification>li {
+    cursor: pointer!important;
+}

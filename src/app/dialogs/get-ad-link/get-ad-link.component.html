@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Do you want to add a redirect link for your ad?</h1>
+<mat-dialog-content class="mat-typography">
+    <div class="form-group">
+        <input class="form-control sl-form-control" [formControl]="link" type="text" placeholder="Ad redirect link">
+    </div>
+    <p class="text-center">Please provide a redirect link if yes</p>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <div matRipple [matRippleColor]="color">
+        <button mat-button class="btn sl-btn sl-btn-active" (click)="dismiss(null)">No</button>
+    </div>
+    <div class="ml-2" matRipple [matRippleColor]="color">
+        <button mat-button class="btn sl-btn sl-btn-outline" (click)="getLink()">Yes</button>
+    </div>
+</mat-dialog-actions>

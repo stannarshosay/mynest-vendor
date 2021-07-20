@@ -34,8 +34,9 @@
                                 </div>
                                 <div class="sl-loginicon">
                                     <ul>
-                                        <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" class="sl-facebookbox"><i class="fab fa-facebook-f"></i>via facebook</a></li>
-                                        <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" class="sl-googlebox"><i class="fab fa-google"></i>via google</a></li>
+                                        <!-- <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" class="sl-facebookbox"><i class="fab fa-facebook-f"></i>via facebook</a></li>
+                                        <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" class="sl-googlebox"><i class="fab fa-google"></i>via google</a></li> -->
+                                        <li matRipple [matRippleColor]="color"><a href="javascript:void(0);" (click)="loginWithOtp()" class="sl-otpbox"><i class="fas fa-mobile-alt"></i>via mobile otp</a></li>
                                     </ul>
                                 </div>
                             </div>

@@ -9,12 +9,12 @@
             <p>No notifications yet!</p>
         </div>
         <ul class="sl-allnotification" *ngIf="notifications.length">
-            <li *ngFor="let message of notifications | paginate:config">
-                <div class="sl-notititle">
-                    <h4><a href="javascript:void(0);">{{message.createdDate}}</a></h4>
+            <li *ngFor="let message of notifications | paginate:config" (click)="goToRespectivePage(message.notificationType)" style="cursor: pointer;">
+                <div class="sl-notititle" [class.read]="message.readStatus">
+                    <h4><a href="javascript:void(0);">{{message.message}}</a></h4>
                 </div>
                 <div class="sl-notidescription">
-                    <p>{{message.message}}</p>
+                    <p>{{getBeautifiedDate(message.createdDate)}}</p>
                 </div>
             </li>
         </ul>

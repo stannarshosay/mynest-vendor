@@ -2,8 +2,9 @@ import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { GetAdLinkComponent } from 'src/app/dialogs/get-ad-link/get-ad-link.component';
 import { AdvertisementService } from 'src/app/services/advertisement.service';
-
+import moment from 'moment';
 @Component({
   selector: 'app-my-advertisements',
   templateUrl: './my-advertisements.component.html',
@@ -20,6 +21,7 @@ export class MyAdvertisementsComponent implements OnInit {
   adFile:File=null;
   adId:string;
   slots:any[] = [];
+  link:any = null;
 
   constructor(
     private snackBar:MatSnackBar,
@@ -56,7 +58,14 @@ export class MyAdvertisementsComponent implements OnInit {
   onAdSelect(event:any,vendorAdId:string){
     this.adFile = event.target.files[0];
     if(this.adFile){  
-      this.uploadAdPic(vendorAdId);
+        const dialogRef = this.dialog.open(GetAdLinkComponent,{
+          disableClose:true         
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {          
+          this.link = result;
+          this.uploadAdPic(vendorAdId);
+        });
     }
   }
   uploadAdPic(vendorAdId:string){
@@ -65,7 +74,7 @@ export class MyAdvertisementsComponent implements OnInit {
     this.showSnackbar("Please be patient! uploading ad pic...",true,"okay");
     const uploadData = new FormData();
     uploadData.append('adPic', this.adFile);
-    this.adService.uploadAdPic(uploadData,vendorAdId).subscribe(
+    this.adService.uploadAdPic(uploadData,vendorAdId,this.link).subscribe(
     (event: HttpEvent<any>) => {
       switch (event.type) {
         case HttpEventType.Sent:
@@ -81,6 +90,7 @@ export class MyAdvertisementsComponent implements OnInit {
           if(event.body["success"]){
             this.showSnackbar("Uploaded Ad pic",true,"close");            
             this.adFile = null;
+            this.link = null;
             this.getSlots();
           }else{
             this.showSnackbar("Server error",true,"close");
@@ -100,5 +110,7 @@ export class MyAdvertisementsComponent implements OnInit {
         this.showSnackbar("Connection Error!",true,"close");
     }); 
 }
-
+getBeautifiedDate(dateString:string){
+  return moment(dateString, "DD/MM/YYYY").format('Do MMM YYYY');
+}
 }

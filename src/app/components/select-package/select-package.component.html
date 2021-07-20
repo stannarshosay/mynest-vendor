@@ -15,7 +15,7 @@
         <div class="sl-packagePlan">
             <div class="row">
                 <mat-spinner [diameter]="30" class="m-auto" [hidden]="showSpinner"></mat-spinner>
-                <div class="col-md-6 col-xl-4" *ngFor="let package of packages">
+                <div class="col-md-6 col-xl-4" *ngFor="let package of packages" [hidden]="!package.active">
                     <div class="sl-package">
                         <div class="sl-package__title">
                             <img src="assets/images/index/packages/{{package.membershipName}}.png" alt="Image Description">

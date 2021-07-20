@@ -4,7 +4,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { AdvertisementService } from 'src/app/services/advertisement.service';
 import { RegisterLoginService } from 'src/app/services/register-login.service';
 declare var Razorpay: any;
-
+import moment from 'moment';
 @Component({
   selector: 'app-advertise',
   templateUrl: './advertise.component.html',
@@ -145,7 +145,10 @@ export class AdvertiseComponent implements OnInit {
           if(res["success"]){
             this.showSnackbar("Booked successfully, Upload ads in My Ads section!",true,"close");
             window.scroll(0,0);
-            this.loadSlots();
+            this.loadSlots();            
+            this.totalAmount = 0;
+            this.selectedSlots = [];
+            this.orderId = null;
           }else{
             this.showSnackbar("Internal Server Error!",true,"close");
           }
@@ -185,5 +188,7 @@ export class AdvertiseComponent implements OnInit {
       this.isBooking = false;
     });    
   }
-
+  getBeautifiedDate(dateString:string){
+    return moment(dateString, "DD/MM/YYYY").format('Do MMM YYYY');
+  }
 }

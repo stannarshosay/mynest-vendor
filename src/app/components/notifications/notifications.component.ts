@@ -3,7 +3,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ChatroomService } from 'src/app/services/chatroom.service';
-
+import moment from 'moment';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
@@ -21,7 +21,8 @@ export class NotificationsComponent implements OnInit {
   getRecievedNotificationSubscription:Subscription;
   constructor(
     private chatService:ChatroomService,
-    private snackBar:MatSnackBar
+    private snackBar:MatSnackBar,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +70,50 @@ export class NotificationsComponent implements OnInit {
       });
     }
   }
+  goToRespectivePage(notificationType:string){
+    switch(notificationType){
+      case "AD_ACCEPTED":{
+        this.router.navigateByUrl("/my-advertisements");
+        break;
+      }
+      case "AD_REJECTED ":{
+        this.router.navigateByUrl("/my-advertisements");
+        break;
+      }
+      case "PROFILE_VERIFIED":{
+        this.router.navigateByUrl("/dashboard");
+        break;
+      }
+      case "REQ_REPORT_ACCEPTED":{
+        this.router.navigateByUrl("/requirements");
+        break;
+      }
+      case "REQ_REPORT_REJECTED":{
+        this.router.navigateByUrl("/requirements");
+        break;
+      }
+      case "NEW_REQUIREMENT":{
+        this.router.navigateByUrl("/requirements");
+        break;
+      }
+      case "AD_RUNNING":{
+        this.router.navigateByUrl("/my-advertisements");
+        break;
+      }
+      case "AUTO_PLAN_DOWN":{
+        this.router.navigateByUrl("/packages");
+        break;
+      }
+      case "AGENT_REMOVAL_REJECTED":{
+        this.router.navigateByUrl("/profile-settings");
+        break;
+      }
+      case "AGENT_REMOVAL_ACCEPTED":{
+        this.router.navigateByUrl("/profile-settings");
+        break;
+      }
+    }
+}
   showSnackbar(content:string,hasDuration:boolean,action:string){
     const config = new MatSnackBarConfig();
     if(hasDuration){
@@ -81,4 +126,14 @@ export class NotificationsComponent implements OnInit {
     this.pageNo = newPage-1;
     this.getNotifications(this.pageNo,this.pageSize);
   } 
+  getBeautifiedDate(dateString:string){
+    let date = moment(dateString, "DD/MM/YYYY HH:mm:ss");
+    if(date.isSame(moment(),'day')){
+      return "Today " + date.format('h:mm a');
+    }
+    if(date.isSame(moment().subtract(1,"days"),'day')){      
+      return "Yesterday " + date.format('h:mm a');
+    }
+    return date.format('Do MMM YYYY h:mm a');
+  }
 }

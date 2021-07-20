@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Are you sure you want to remove this agent?</h1>
+<mat-dialog-content class="mat-typography">
+    <div class="form-group">
+        <textarea class="form-control sl-form-control" [formControl]="reason" type="text" placeholder="Reason"></textarea>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isRequesting"></mat-spinner>
+    <div matRipple [matRippleColor]="color" *ngIf="!isRequesting">
+        <button mat-button mat-dialog-close class="btn sl-btn sl-btn-active" [mat-dialog-close]="false">No</button>
+    </div>
+    <div matRipple [matRippleColor]="color" *ngIf="!isRequesting">
+        <button mat-button (click)="requestRemoval()" class="btn sl-btn sl-btn-outline">Yes</button>
+    </div>
+</mat-dialog-actions>

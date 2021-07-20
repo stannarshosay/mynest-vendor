@@ -5,6 +5,16 @@
     <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
         <!-- #enddocregion label-position -->
         <mat-step label="Company details" [editable]="false" [completed]="isCompletedCompanyDetails">
+            <div class="sl-dashboardbox__content pt-0 pb-0 mb-0 mt-0">
+                <a href="javascript:void(0)" (click)="openRefferalDialog()" *ngIf="!isAgent">Do you have a refferal code?</a>
+                <div *ngIf="isAgent" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div>
+                        <span class="agent-label">Agent</span><br>
+                        <h5>{{agent.firstName}}&nbsp;{{agent.lastName}},&nbsp;{{agent.location}}</h5>
+                    </div>
+                    <span (click)="removeAgent()" class="remove-agent" matTooltip="remove agent"><i class="fas fa-times text-danger"></i></span>
+                </div>
+            </div>
             <div class="sl-dashboardbox__content">
                 <form class="sl-form sl-manageServices" [formGroup]="companyDetailsForm">
                     <fieldset>
@@ -24,7 +34,7 @@
                             <div class="form-group form-group-half">
                                 <input class="form-control sl-form-control" formControlName="websiteLink" type="text" placeholder="Website Url">
                             </div>
-                            <div class="form-group form-group-half">
+                            <div class="form-group form-group-half" [matTooltip]="isAgent?'Agent location and vendor location set as same':'Select company location'">
                                 <select class="form-control sl-form-control" formControlName="location" type="text">
                                     <option value="none">Select location*</option>
                                     <option value="{{location.district}}" *ngFor="let location of locations">{{location.district}}</option>

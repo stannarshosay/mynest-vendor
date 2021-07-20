@@ -15,11 +15,13 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { PackageGuard } from './guards/package.guard';
 import { ProfileGuard } from './guards/profile.guard';
+import { FaqComponent } from './components/faq/faq.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate:[AuthGuard]},
   { path: 'packages', component: PackagesComponent,canActivate:[AuthGuard]},
+  { path: 'faq', component: FaqComponent,canActivate:[AuthGuard]},
   { path: 'advertise', component: AdvertiseComponent,canActivate:[AuthGuard]},
   { path: 'my-advertisements', component: MyAdvertisementsComponent,canActivate:[AuthGuard]},
   { path: 'requirements', component: RequirementsComponent,canActivate:[AuthGuard]},

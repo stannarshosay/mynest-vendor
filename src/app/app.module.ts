@@ -50,6 +50,11 @@ import { AdvertiseComponent } from './components/advertise/advertise.component';
 import { MyAdvertisementsComponent } from './components/my-advertisements/my-advertisements.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ForgotPasswordComponent } from './dialogs/forgot-password/forgot-password.component';
+import { LoginOtpComponent } from './dialogs/login-otp/login-otp.component';
+import { GetAdLinkComponent } from './dialogs/get-ad-link/get-ad-link.component';
+import { RefferalCodeComponent } from './dialogs/refferal-code/refferal-code.component';
+import { RequestAgentRemovalComponent } from './dialogs/request-agent-removal/request-agent-removal.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 
 @NgModule({
@@ -74,7 +79,12 @@ import { ForgotPasswordComponent } from './dialogs/forgot-password/forgot-passwo
     AdvertiseComponent,
     MyAdvertisementsComponent,
     NotificationsComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    LoginOtpComponent,
+    GetAdLinkComponent,
+    RefferalCodeComponent,
+    RequestAgentRemovalComponent,
+    FaqComponent
   ],
   imports: [
     BrowserModule,

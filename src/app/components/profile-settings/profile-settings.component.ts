@@ -1,7 +1,11 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { RefferalCodeComponent } from 'src/app/dialogs/refferal-code/refferal-code.component';
+import { RequestAgentRemovalComponent } from 'src/app/dialogs/request-agent-removal/request-agent-removal.component';
+import { AgentService } from 'src/app/services/agent.service';
 import { RegisterLoginService } from 'src/app/services/register-login.service';
 
 @Component({
@@ -11,6 +15,11 @@ import { RegisterLoginService } from 'src/app/services/register-login.service';
 })
 export class ProfileSettingsComponent implements OnInit {
   //based on membership
+  agent:any = {};
+  agentToAdd:any = {};
+  isAgent:boolean = false;
+  isRequesting:boolean = false;
+  isRefferalCorrect:boolean = false;
   galleryMaxCount:number = 10;
   color:string = "rgba(255,255,255,0.2)";
   darkColor:string = "rgba(0,0,0,0.1)";
@@ -24,7 +33,7 @@ export class ProfileSettingsComponent implements OnInit {
   isUploading:boolean = false;
   companyDetailsForm: FormGroup;
   categoryAndLocationsForm: FormGroup;
-
+  vendorLocation:string = "NA";
   categoryName:any = "Loading...";
   categoryId:any;
 
@@ -54,7 +63,9 @@ export class ProfileSettingsComponent implements OnInit {
   constructor(
     private registerLoginService:RegisterLoginService,
     private snackBar:MatSnackBar,
-    private fb:FormBuilder
+    private fb:FormBuilder,
+    private agentService:AgentService,
+    public dialog:MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -80,6 +91,21 @@ export class ProfileSettingsComponent implements OnInit {
       repassword:['',Validators.required]
     });
     this.getAllLocation();  
+    this.getAgentDetails();
+  }
+  getAgentDetails(){
+    this.agentService.getAgentDetailsByVendorId(localStorage.getItem("vid")).subscribe(res=>{
+      if(res["success"]){
+        this.isAgent = res["data"]?true:false;
+        this.agent = res["data"];
+      }else{
+        this.isAgent = false;
+        this.showSnackbar("Agent detail error!",true,"close");
+      }
+    },error=>{
+      this.isAgent = false;
+      this.showSnackbar("Connection error!",true,"close");
+    });
   }
   getAllLocation(){
     this.registerLoginService.getAllLocations().subscribe(res=>{
@@ -99,6 +125,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.registerLoginService.getVendorProfileDetails(localStorage.getItem("vid")).subscribe(res=>{
       this.isGettingProfileDetails = false;
       if(res["success"]){
+        this.vendorLocation = res["data"]["location"];
         this.setExistingImages(res["data"]);
         this.changeCoordinates(parseFloat(res["data"]["latitude"]),parseFloat(res["data"]["longitude"]));
         if((res["data"]["whatsappNum"])&&(res["data"]["whatsappNum"]!="")){
@@ -524,4 +551,53 @@ deleteGalleryImage(url:string){
   });
 }
 
+removeAgent(){
+  const dialogRef = this.dialog.open(RequestAgentRemovalComponent,{
+    data:this.agent.agentId
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if(result){ 
+      this.showSnackbar("Requested for agent removal, be notified when done!",true,"close");    
+    }
+  });
+}
+openRefferalDialog(){
+  const dialogRef = this.dialog.open(RefferalCodeComponent,{});
+
+  dialogRef.afterClosed().subscribe(result => {
+    if(result){ 
+      if(result["isAgent"]){  
+        if(this.vendorLocation == result["agent"]["location"]){
+          this.isRefferalCorrect = true;
+          this.agentToAdd = result["agent"];
+        }else{
+          this.showSnackbar("Oops! Agent-Vendor Locations Not Same.",true,"close");
+        }
+      }       
+    }
+  });
+}
+removeAgentRefferal(){
+  this.isRefferalCorrect = false;
+  this.agentToAdd = {};
+}
+addAgentRequest(){  
+      this.isRequesting = true;
+      this.agentService.addAgent(this.agentToAdd["agentId"],localStorage.getItem("vid")).subscribe(res=>{
+        this.isRequesting = false;
+        if(res["success"]){
+          this.showSnackbar("Requested For Agent Addition!",true,"close");
+          setTimeout(()=>{
+            this.showSnackbar("Will be notified on Addition!",true,"close");
+          },3000);
+          this.removeAgentRefferal();
+        }else{
+          this.showSnackbar("fetch server error",true,"close");
+        }
+      },error=>{
+        this.isRequesting = false;
+        this.showSnackbar("fetch connection error",true,"close");
+      });
+}
 }

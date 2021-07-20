@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add Agent Using Refferal Code</h1>
+<mat-dialog-content class="mat-typography">
+    <div class="form-group">
+        <input class="form-control sl-form-control" [formControl]="code" type="text" placeholder="Refferal Code*">
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isProcessing"></mat-spinner>
+    <div matRipple [matRippleColor]="color" *ngIf="!isProcessing">
+        <button mat-button (click)="closeDialog()" class="btn sl-btn sl-btn-active" [mat-dialog-close]="false">Cancel</button>
+    </div>
+    <div matRipple [matRippleColor]="color" *ngIf="!isProcessing">
+        <button mat-button (click)="addAgent()" class="btn sl-btn sl-btn-outline">Add</button>
+    </div>
+</mat-dialog-actions>

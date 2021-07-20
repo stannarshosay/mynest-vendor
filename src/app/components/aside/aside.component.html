@@ -26,12 +26,12 @@
                 </div>
                 <nav id="sl-navdashboard" class="sl-navdashboard">
                     <ul>
-                        <li routerLinkActive="sl-active">
+                        <li (click)="closeSidebar()" routerLinkActive="sl-active">
                             <a routerLink="dashboard">
                                 <i class="ti-dashboard"></i><span>Dashboard</span>
                             </a>
                         </li>
-                        <li routerLinkActive="sl-active">
+                        <li (click)="closeSidebar()" routerLinkActive="sl-active">
                             <a href="javascript:void(0)" routerLink="profile-settings">
                                 <i class="ti-user"></i><span>Profile Settings</span>
                             </a>
@@ -41,22 +41,22 @@
                                 <i class="ti-announcement"></i><span>Advertisements</span>
                             </a>
                             <ul class="sub-menu">
-                                <li><a href="javascript:void(0);" routerLink="my-advertisements">My Advertisements</a></li>
-                                <li><a href="javascript:void(0);" routerLink="advertise">Create Ad</a></li>
+                                <li><a href="javascript:void(0);" (click)="closeSidebar()" routerLink="my-advertisements">My Advertisements</a></li>
+                                <li><a href="javascript:void(0);" (click)="closeSidebar()" routerLink="advertise">Create Ad</a></li>
                             </ul>
                         </li>
                         <li routerLinkActive="sl-active">
-                            <a href="javascript:void(0)" routerLink="/requirements">
+                            <a href="javascript:void(0)" (click)="closeSidebar()" routerLink="/requirements">
                                 <i class="ti-clipboard"></i><span>Requirements</span>
                             </a>
                         </li>
                         <li routerLinkActive="sl-active">
-                            <a href="javascript:void(0)" routerLink="/packages">
+                            <a href="javascript:void(0)" (click)="closeSidebar()" routerLink="/packages">
                                 <i class="ti-package"></i><span>Packages</span>
                             </a>
                         </li>
                         <li routerLinkActive="sl-active">
-                            <a href="javascript:void(0)" routerLink="/notifications">
+                            <a href="javascript:void(0)" (click)="closeSidebar()" routerLink="/notifications">
                                 <i class="ti-bell"></i><span>Notifications</span>
                             </a>
                         </li>

@@ -19,8 +19,8 @@ export class AdvertisementService {
   getBookedSlots(vendorId:string){
     return this.http.post("https://mynestonline.com/collection/api/booked-slots?vendorId="+vendorId,null);
   }
-  uploadAdPic(fileFormData:any,vendorAdId:string){
-    return this.http.post("https://mynestonline.com/collection/api/request-ad-approval?vendorAdId="+vendorAdId,fileFormData,{
+  uploadAdPic(fileFormData:any,vendorAdId:string,link:any){
+    return this.http.post("https://mynestonline.com/collection/api/request-ad-approval?vendorAdId="+vendorAdId+"&link="+link,fileFormData,{
       reportProgress: true,
       observe: 'events'
     });

@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ChatroomService } from 'src/app/services/chatroom.service';
 import { RegisterLoginService } from 'src/app/services/register-login.service';
 import { VendorService } from 'src/app/services/vendor.service';
-
+import moment from 'moment';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -169,9 +169,78 @@ export class HeaderComponent implements OnInit {
     return message;
   }
   goToChatroom(provider:any){  
-    // this.chatService.setContactData(provider);
+    this.chatService.setContactData(provider);
+    if(this.router.url == "/dashboard"){
+      this.chatService.whenSamePageMessages.next(true);
+    }
     this.router.navigate(["/dashboard"]);
-  } 
+  }
+  goToRespectivePage(notificationType:string,notificationId:any){
+    this.updateReadStatus(notificationId);
+    switch(notificationType){
+      case "AD_ACCEPTED":{
+        this.router.navigateByUrl("/my-advertisements");
+        break;
+      }
+      case "AD_REJECTED ":{
+        this.router.navigateByUrl("/my-advertisements");
+        break;
+      }
+      case "PROFILE_VERIFIED":{
+        this.router.navigateByUrl("/dashboard");
+        break;
+      }
+      case "REQ_REPORT_ACCEPTED":{
+        this.router.navigateByUrl("/requirements");
+        break;
+      }
+      case "REQ_REPORT_REJECTED":{
+        this.router.navigateByUrl("/requirements");
+        break;
+      }      
+      case "NEW_REQUIREMENT":{
+        this.router.navigateByUrl("/requirements");
+        break;
+      }
+      case "AD_RUNNING":{
+        this.router.navigateByUrl("/my-advertisements");
+        break;
+      }
+      case "AUTO_PLAN_DOWN":{
+        this.router.navigateByUrl("/packages");
+        break;
+      }
+      case "AGENT_REMOVAL_REJECTED":{
+        this.router.navigateByUrl("/profile-settings");
+        break;
+      }
+      case "AGENT_REMOVAL_ACCEPTED":{
+        this.router.navigateByUrl("/profile-settings");
+        break;
+      }
+    }
+}
+getBeautifiedDate(dateString:string){
+  let date = moment(dateString, "DD/MM/YYYY HH:mm:ss");
+  if(date.isSame(moment(),'day')){
+    return "Today " + date.format('h:mm a');
+  }
+  if(date.isSame(moment().subtract(1,"days"),'day')){      
+    return "Yesterday " + date.format('h:mm a');
+  }
+  return date.format('Do MMM YYYY h:mm a');
+}
+updateReadStatus(notificationId:any){    
+  let paramData = {};
+  paramData["notificationIds"] = [notificationId];
+  if(paramData["notificationIds"].length){
+    this.chatService.updateNotificationReadStatus(paramData).subscribe(res=>{
+        this.chatService.hasRecievedNotification.next("no"); 
+    },error=>{
+      console.log(error);
+    });
+  }
+}
   ngOnDestroy():void{
      this.logoValueSubscription.unsubscribe();
      this.getLoginSetStatusSubscription.unsubscribe();

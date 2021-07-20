@@ -59,7 +59,7 @@ export class PackagesComponent implements OnInit {
     return this.snackBar.open(content, action, config);
   }
   setCounter(){
-    //jquery
+    // jquery
     jQuery('#sl-packagecounter').countdown(this.vendorDetails.packageExpiryDate.split("/").reverse().join("/"), function(event) {
       var $this = jQuery(this).html(event.strftime('' +
           '<li><div class="sl-buyPackage__heading"><h3>%-D</h3><h6>Days</h6></div></li>' +

@@ -29,7 +29,7 @@
                 <div class="date-slot" fxFlex="33" *ngFor="let slot of slots">
                     <input type="checkbox" id="{{slot.slotId}}" [disabled]="slot.slotStatus != 'AVAILABLE'" (change)="toggleSlot($event,slot)">
                     <label fxFlex [class.booked]="slot.slotStatus != 'AVAILABLE'" for="{{slot.slotId}}" [matTooltip]="(slot.slotStatus != 'AVAILABLE')?'already booked':'available'">
-                        <span class="label-slot">{{slot.startingDate}} to {{slot.endingDate}}</span>
+                        <span class="label-slot">{{getBeautifiedDate(slot.startingDate)}} to {{getBeautifiedDate(slot.endingDate)}}</span>
                         <span class="label-price">&#8377;&nbsp;{{slot.price}}</span>
                     </label>
                 </div>

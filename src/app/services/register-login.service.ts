@@ -146,5 +146,11 @@ export class RegisterLoginService {
   forgotPasswordOfVendor(email:string,role:string):Observable<any>{
     return this.http.post("https://mynestonline.com/collection/api/forgot-pass?role="+role+"&email="+email,null);
   }
+  sendOtpForLogin(mobile:string,role:string):Observable<any>{
+    return this.http.post("https://mynestonline.com/collection/api/otp/login/sms-otp?mobile="+mobile+"&role="+role,null);
+  }
+  verifyOtpForLogin(paramData:any){
+    return this.http.post("https://mynestonline.com/collection/api/otp/verify-login",paramData);
+  }
   
 } 

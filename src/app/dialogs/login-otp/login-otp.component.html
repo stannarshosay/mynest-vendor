@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content class="mat-typography">
+    <form class="sl-formtheme sl-formlogin">
+        <fieldset>
+            <div class="form-group" [formGroup]="mobileForm" *ngIf="!isSendOtp">
+                <input type="text" formControlName="mobile" name="mobile" class="form-control sl-form-control" placeholder="Mobile number*">
+                <mat-error *ngIf="(!mobileForm.get('mobile').valid)&&(isSubmitted)">Mobile number is invalid</mat-error>
+            </div>
+            <input class="form-control sl-form-control" *ngIf="isSendOtp" [formControl]="otp" type="text" placeholder="OTP*">
+            <p *ngIf="isSendOtp" class="mt-3 text-center"><span class="text-muted">Not recieved otp?</span>&nbsp;<a href="javascript:void(0);" (click)="sendOtp()">resend</a></p>
+        </fieldset>
+    </form>
+    <p class="text-center mt-2">{{infoText}}</p>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-spinner [diameter]="30" class="m-auto mt-3" *ngIf="isProcessing"></mat-spinner>
+    <div matRipple [matRippleColor]="color" *ngIf="!isProcessing">
+        <button mat-button mat-dialog-close class="btn sl-btn sl-btn-active" (click)="dismiss(false,null)">Cancel</button>
+    </div>
+    <div matRipple [matRippleColor]="color" *ngIf="!isSendOtp">
+        <a (click)="sendOtp()" href="javascript:void(0);" class="btn sl-btn sl-btn-outline" *ngIf="!isProcessing">Send Otp</a>
+    </div>
+    <div matRipple [matRippleColor]="color" *ngIf="isSendOtp">
+        <a (click)="verifyLogin()" href="javascript:void(0);" class="btn sl-btn sl-btn-outline" *ngIf="!isProcessing">Verify</a>
+    </div>
+</mat-dialog-actions>

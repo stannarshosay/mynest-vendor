@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ChatroomService } from 'src/app/services/chatroom.service';
 import { RegisterLoginService } from 'src/app/services/register-login.service';
-
+import moment from 'moment';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   vendorId:any; 
   getLoginSetStatus:Subscription;
   getRecievedMessagesSubscription:Subscription;
+  getSamePageMessagesSubscription:Subscription;
   isGettingContacts:boolean = false;
   showNoContacts:boolean = false;
   isGettingMessages:boolean = false;
@@ -26,7 +27,11 @@ export class DashboardComponent implements OnInit {
   contactData:any;
   messageControl:FormControl;
   contacts:any[] = [];
-
+  dateForExpiryAsString:string = "0";
+  vendorDetails:any = "";
+  messageCount:string = "";
+  isGettingVendorDetails:boolean = true;
+  isGettingMessageCount:boolean = true;
   quoteProgress:number = 0;
   quoteFilename:string = "";
   quoteFile:File=null;
@@ -42,6 +47,7 @@ export class DashboardComponent implements OnInit {
    ngOnInit(): void {   
      this.messageControl = new FormControl('',Validators.required);
      this.vendorId = localStorage.getItem("vid");
+     this.getVendorProfileDetails();
      this.getLoginSetStatus = this.loginService.getLoginSetStatus().subscribe(res =>{      
        if(!res){
          this.router.navigate(["home"]);
@@ -51,12 +57,63 @@ export class DashboardComponent implements OnInit {
         if(res!="no"){
           this.onRecieveMessage(res);
         }
+        this.setMessageUnreadCount();
      });
-     this.getAllContacts(true);    
+     this.getSamePageMessagesSubscription = this.chatService.getSamePageMessagesStatus().subscribe(res=>{
+      if(res){
+        this.isGettingContacts = false;
+        this.showNoContacts = false;
+        this.isGettingMessages = false;
+        this.showNoMessages = false;
+        this.messages = [];
+        this.contactData = null;
+        this.contacts = [];
+        this.getAllContacts(true);  
+      }
+    });
+     this.getAllContacts(true);   
    }
+   getVendorProfileDetails(){
+    this.isGettingVendorDetails = true;
+    this.loginService.getVendorBasicDetails(localStorage.getItem("vid")).subscribe(res=>{
+      this.isGettingVendorDetails = false;
+      if(res["success"]){
+        this.vendorDetails = res["data"];
+        this.setMessageUnreadCount();
+        this.setDaysLeft();
+      }
+    },error=>{
+      console.log(error);
+    });
+    }
+    setMessageUnreadCount(){
+      this.isGettingMessageCount = true;
+      this.chatService.getMessagesUnreadCount(localStorage.getItem("vid")).subscribe(res=>{
+        this.isGettingMessageCount = false;
+        if(res["success"]){
+          this.messageCount = res["data"]>50?"50+":res["data"];
+        }else{
+          this.messageCount = "";
+        }
+      }); 
+    }
+    setDaysLeft() {
+      let startDate = new Date();
+      let endDate = new Date(Number(this.vendorDetails.packageExpiryDate.split("/")[2]),Number(this.vendorDetails.packageExpiryDate.split("/")[1])-1,Number(this.vendorDetails.packageExpiryDate.split("/")[0]));
+      const oneDay = 1000 * 60 * 60 * 24;  
+      let start = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      let end = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());  
+      let diff = (start - end) / oneDay;
+      if(diff<0){
+        this.dateForExpiryAsString = "0";
+      }else{
+        this.dateForExpiryAsString = diff.toString();
+      }
+    }
    ngOnDestroy():void{
      this.getLoginSetStatus.unsubscribe();
      this.getRecievedMessagesSubscription.unsubscribe();
+     this.getSamePageMessagesSubscription.unsubscribe();
    }
    showSnackbar(content:string,hasDuration:boolean,action:string){
      const config = new MatSnackBarConfig();
@@ -86,13 +143,25 @@ export class DashboardComponent implements OnInit {
      });
    }
    checkRecievedContactData(){
-     if(this.contacts.length){
-       this.contactData = this.contacts[0];
-       this.getMessages(this.contactData.customerId);
-     }else{
-       this.isGettingMessages = false;
-       this.showNoMessages = true;
-     }
+    if(this.chatService.hasContactData()){
+      this.contactData =  this.chatService.getContactData();
+      this.chatService.clearContactData();
+      let index = this.contacts.findIndex(obj=>obj.customerId == this.contactData.customerId);
+      if(index>-1){
+        this.contactData = this.contacts[index];
+        this.contacts.splice(index,1);
+        this.contacts.unshift(this.contactData);
+      }else{
+        this.contacts.unshift(this.contactData);
+      }      
+      this.getMessages(this.contactData.customerId);
+    }else if(this.contacts.length){
+      this.contactData = this.contacts[0];
+      this.getMessages(this.contactData.customerId);
+    }else{
+      this.isGettingMessages = false;
+      this.showNoMessages = true;
+    }
    }
    getMessages(customerId:any){
      this.messages = [];
@@ -264,9 +333,7 @@ export class DashboardComponent implements OnInit {
       return message;
    }
    getFormattedDate() {
-     var date = new Date();
-     var str =  date.getDate() + "/" + (date.getMonth() + 1) + "/" +date.getFullYear() + " " +  date.getUTCHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-     return str;
+      return moment().format("DD/MM/YYYY HH:mm:ss");
    }
    ngAfterViewChecked() {        
      this.scrollToBottom();        
@@ -278,4 +345,14 @@ export class DashboardComponent implements OnInit {
        console.log("error on scroll to bottom : "+err);
      }                 
    }
+   getBeautifiedDate(dateString:string){
+    let date = moment(dateString, "DD/MM/YYYY HH:mm:ss");
+    if(date.isSame(moment(),'day')){
+      return "Today " + date.format('h:mm a');
+    }
+    if(date.isSame(moment().subtract(1,"days"),'day')){      
+      return "Yesterday " + date.format('h:mm a');
+    }
+    return date.format('Do MMM YYYY h:mm a');
+  }
 }

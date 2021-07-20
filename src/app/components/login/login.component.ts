@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ForgotPasswordComponent } from 'src/app/dialogs/forgot-password/forgot-password.component';
+import { LoginOtpComponent } from 'src/app/dialogs/login-otp/login-otp.component';
 import { ChatroomService } from 'src/app/services/chatroom.service';
 import { RegisterLoginService } from 'src/app/services/register-login.service';
 
@@ -87,4 +88,21 @@ export class LoginComponent implements OnInit {
       // console.log("forgot password closed");
     });
   }
+  loginWithOtp(){    
+    const dialogRef = this.dialog.open(LoginOtpComponent,{
+      disableClose:true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result["isVerified"]){      
+        let loginData = result['data'];
+        localStorage.setItem("vid",loginData["id"]);
+        localStorage.setItem("vname",loginData["username"]);
+        this.registerLoginService.hasLoggedIn.next(true);
+        this.chatService.hasRecievedMessage.next("no");
+        this.chatService.hasRecievedNotification.next("no");
+        this.setVendorStatusAndRedirect("Otp Login Successfull!");   
+      }
+    });   
+   }  
 }

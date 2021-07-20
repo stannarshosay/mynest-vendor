@@ -1,4 +1,28 @@
-<mat-spinner [diameter]="30" class="m-auto" *ngIf="isGettingProfileDetails"></mat-spinner>
+<div class="sl-dashboardbox__content pt-2 pb-2 mb-0 mt-0" *ngIf="isAgent">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <span class="agent-label">Agent&nbsp;</span>
+            <span class="agent-code">{{agent.rewardCode}}</span><br>
+            <h5>{{agent.firstName}}&nbsp;{{agent.lastName}},&nbsp;{{agent.location}}</h5>
+            <small><i class="fas fa-envelope"></i>&nbsp;{{agent.email}}&nbsp;&nbsp;<i class="fas fa-mobile"></i>&nbsp;{{agent.mobile}}</small>
+        </div>
+        <span (click)="removeAgent()" class="remove-agent" matTooltip="request agent removal"><i class="fas fa-times text-danger"></i></span>
+    </div>
+</div>
+<div class="sl-dashboardbox__content pt-2 pb-2 mb-0 mt-0" *ngIf="!isAgent">
+    <a href="javascript:void(0)" (click)="openRefferalDialog()" *ngIf="!isRefferalCorrect">Request agent addition by refferal code?</a>
+    <div *ngIf="isRefferalCorrect" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <span class="agent-label">Agent&nbsp;</span>
+            <span class="agent-code">{{agentToAdd.rewardCode}}</span><br>
+            <h5>{{agentToAdd.firstName}}&nbsp;{{agentToAdd.lastName}},&nbsp;{{agentToAdd.location}}</h5>
+            <span *ngIf="!isRequesting" (click)="addAgentRequest()" class="remove-agent" matTooltip="request to add agent"><i class="fas fa-plus text-primary"></i>&nbsp;Add Agent</span>
+            <span *ngIf="isRequesting" class="remove-agent text-muted" matTooltip="requesting">&nbsp;Please wait...</span>
+        </div>
+        <span (click)="removeAgentRefferal()" class="remove-agent" matTooltip="change agent"><i class="fas fa-times text-danger"></i></span>
+    </div>
+</div>
+<mat-spinner [diameter]="30" class="mr-auto ml-auto mt-3" *ngIf="isGettingProfileDetails"></mat-spinner>
 <div class="sl-tab sl-profileSetting" *ngIf="!isGettingProfileDetails">
     <mat-horizontal-stepper labelPosition="bottom" #stepper>
         <!-- #enddocregion label-position -->

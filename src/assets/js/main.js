@@ -21,18 +21,6 @@ jQuery(document).on('ready', function() {
             $(this).closest('li').remove();
         })
     }
-    var slDropdown__cart = document.querySelector('.sl-dropdown__cart')
-    if (slDropdown__cart !== null) {
-        jQuery(document).on('click', '.sl-dropdown__cart', function(e) {
-            e.stopPropagation();
-        })
-    }
-    var dropdown_notify = document.querySelector('.sl-dropdown__notify')
-    if (dropdown_notify !== null) {
-        jQuery(document).on('click', '.sl-dropdown__notify', function(e) {
-            e.stopPropagation();
-        })
-    }
 
     jQuery(document).on('click', '#collapseUser a', function(e) {
         e.preventDefault();
@@ -46,6 +34,18 @@ jQuery(document).on('ready', function() {
     // DHB USER LOGO END
 
     //Add shadow to header
+    //navbar close for mobile view
+
+    $(document).click(function(event) {
+        var clickover = $(event.target);
+        var _opened = $("#slMainNavbar").hasClass("show");
+        var isToggler = clickover.hasClass("lnr lnr-menu") || clickover.hasClass("navbar-toggler");
+        if (_opened && !(isToggler)) {
+            $(".navbar-toggler").click();
+        }
+    });
+
+    //Add shadow to header
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
         if (scroll > 0) {
@@ -54,6 +54,47 @@ jQuery(document).on('ready', function() {
             $("header").removeClass("shadow");
         }
     });
+
+    //header functions
+
+    var didScroll;
+    var lastScrollTop = 0;
+    var delta = 70;
+
+    $(window).scroll(function(event) {
+        didScroll = true;
+    });
+
+    setInterval(function() {
+        if (didScroll) {
+            hasScrolled();
+            didScroll = false;
+        }
+    }, 250);
+
+    function hasScrolled() {
+        var w = $(window).width();
+        var st = window.pageYOffset || document.documentElement.scrollTop;
+        if (Math.abs(lastScrollTop - st) <= delta)
+            return;
+        if (st > lastScrollTop) {
+            if (w <= 620) {
+                $(".sl-main-header__lower").css("overflow", "hidden");
+                $(".sl-main-header__lower").css("padding", "0px");
+            }
+            $(".sl-main-header__lower").css("height", "0px");
+            $(".sl-main-header__logo img").css('width', '40px');
+
+        } else {
+            if (w <= 620) {
+                $(".sl-main-header__lower").css("overflow", "visible");
+                $(".sl-main-header__lower").css("padding", "10px 20px");
+            }
+            $(".sl-main-header__lower").css("height", "49px");
+            $(".sl-main-header__logo img").css('width', '70px');
+        }
+        lastScrollTop = st;
+    }
     /* ADD AND REMOVE CLASS END */
     jQuery(document).on('click', '#sl-closeasidebar', function(e) {
         jQuery('#sl-asidebar').toggleClass('sl-asideshow')

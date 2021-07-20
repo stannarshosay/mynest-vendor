@@ -1,9 +1,11 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
+import { RefferalCodeComponent } from 'src/app/dialogs/refferal-code/refferal-code.component';
 import { RegisterLoginService } from 'src/app/services/register-login.service';
 @Component({
   selector: 'app-profile-stepper',
@@ -16,7 +18,9 @@ export class ProfileStepperComponent implements OnInit {
   
   color:string = "rgba(255,255,255,0.2)";
   darkColor:string = "rgba(0,0,0,0.1)";
-
+  
+  isAgent:boolean = false;
+  agent:any = {};
   profileProgress:number = 0;
   logoProgress:number = 0;
   galleryProgress:number = 0;
@@ -51,7 +55,8 @@ export class ProfileStepperComponent implements OnInit {
     private registerLoginService:RegisterLoginService,
     private cdr:ChangeDetectorRef,
     private snackBar:MatSnackBar,
-    private router:Router
+    private router:Router,
+    private dialog:MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +91,7 @@ export class ProfileStepperComponent implements OnInit {
         this.locations = res["data"];
       }
     });
+    this.openRefferalDialog();
   }
   setLocation(event:any){
     this.changeCoordinates(event.coords.lat,event.coords.lng);
@@ -144,6 +150,10 @@ export class ProfileStepperComponent implements OnInit {
     if(this.companyDetailsForm.get("whatsappNum").value){
       mergedFormData["whatsappNum"] = "91"+mergedFormData["whatsappNum"];
     }
+    if(this.isAgent){
+      mergedFormData["agentId"] = this.agent.agentId;
+      mergedFormData["location"] = this.agent.location;
+    }
     this.registerLoginService.saveProfileDetails(mergedFormData).subscribe(res=>{
       this.isSaving = false;
       if(res["success"]){  
@@ -157,8 +167,7 @@ export class ProfileStepperComponent implements OnInit {
       console.log(error);
       this.isSaving = false;
       this.showSnackbar("Connection Error",true,"close");
-    });
-    
+    });    
   }
   categorySelected(){
     this.showSnackbar("Loading Services...",false,"");
@@ -414,5 +423,25 @@ deleteGalleryImage(url:string){
     localStorage.setItem("vstatus","");
     this.registerLoginService.hasLoggedIn.next(false);
     this.router.navigate(['login']);
+  }
+  openRefferalDialog(){
+    const dialogRef = this.dialog.open(RefferalCodeComponent,{});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){ 
+        if(result["isAgent"]){
+          this.agent = result["agent"];
+          this.companyDetailsForm.get("location").setValue(this.agent["location"]);
+          this.companyDetailsForm.get("location").disable();
+          this.isAgent = result["isAgent"];
+        }       
+      }
+    });
+  }
+  removeAgent(){
+    this.agent = {};
+    this.companyDetailsForm.get("location").setValue("none");
+    this.companyDetailsForm.get("location").enable();
+    this.isAgent = false;
   }
 }

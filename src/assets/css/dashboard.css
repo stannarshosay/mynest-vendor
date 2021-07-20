@@ -1425,18 +1425,6 @@ header {
     background-color: #363636;
 }
 
-.sl-main-header__logo {
-    justify-content: center;
-    width: 12rem;
-    padding: 1.25rem;
-    min-height: 130px;
-}
-
-.sl-main-header__logo img {
-    display: block;
-    margin: 0 auto;
-}
-
 .sl-main-header__content {
     display: flex;
     flex-direction: column;
@@ -1456,26 +1444,6 @@ header {
 
 .sl-main-header__upper .sl-input-group {
     margin-right: auto;
-}
-
-.sl-main-header__lower {
-    justify-content: space-between;
-    flex-wrap: wrap;
-    min-height: 49px;
-    padding: 0 20px;
-}
-
-.sl-main-header__lower nav {
-    padding: 0;
-}
-
-.sl-main-header__lower--btn {
-    display: none;
-}
-
-.sl-main-header__lower--btn .sl-btn {
-    min-width: 80px;
-    height: 36px;
 }
 
 .sl-main-form {
@@ -8703,6 +8671,7 @@ i.at-color6 {
     justify-content: center;
     flex-direction: column;
     border: 1px solid #ddd;
+    min-height: 220px;
 }
 
 .sl-alertsinfo figure {
@@ -9004,7 +8973,7 @@ i.at-color6 {
 }
 
 .sl-newAppointments__services--description p {
-    font-size: 0.8125rem;
+    font-size: 11px;
 }
 
 .sl-newAppointments__services--description li {
@@ -10432,6 +10401,7 @@ i.at-color6 {
     border: 1px solid #eee;
     border-radius: 4px;
     margin-top: 10px;
+    word-break: break-word;
 }
 
 .sl-messageUser__area span {
@@ -11107,7 +11077,7 @@ i.at-color6 {
         -webkit-box-shadow: 0 5px 10px 0 rgba(255, 255, 255, 0.2);
         box-shadow: 0 5px 10px 0 rgba(255, 255, 255, 0.2);
         color: #039eba;
-        top: 30%;
+        top: 50%;
     }
     .sl-newAppointments__services {
         padding-right: 0;

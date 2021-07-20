@@ -66,4 +66,12 @@ export class AsideComponent implements OnInit {
         jQuery(this).find('.sub-menu').slideToggle(300);
     });
   }
+
+  closeSidebar(){    
+      jQuery('#sl-asidebar').toggleClass('sl-asideshow');
+      if(jQuery('body').hasClass("sl-scrollY-none")){
+        jQuery('body').removeClass('sl-scrollY-none');
+      }
+      jQuery('#sl-closeasidebar').find('i').toggleClass('lnr lnr-layers lnr lnr-cross'); 
+  }
 }

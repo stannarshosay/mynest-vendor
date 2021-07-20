@@ -4,7 +4,7 @@
     <p>No slots booked.</p>
 </div>
 <mat-accordion *ngIf="!isGettingSlots">
-    <mat-expansion-panel *ngFor="let slot of slots">
+    <mat-expansion-panel *ngFor="let slot of slots" class="ads-panel">
         <mat-expansion-panel-header>
             <div class="sl-newAppointments__userDetail">
                 <div class="sl-newAppointments__userText">
@@ -18,7 +18,7 @@
                     <h6>Booked Slot</h6>
                     <ul>
                         <li class="">
-                            <p class="booked-date-slots">{{slot.startingDate}} to {{slot.endingDate}}</p>
+                            <p class="booked-date-slots">{{getBeautifiedDate(slot.startingDate)}} to {{getBeautifiedDate(slot.endingDate)}}</p>
                         </li>
                     </ul>
                 </div>
@@ -29,15 +29,15 @@
             </div>
             <div *ngIf="slot.slotStatus == 'ACCEPTED'">
                 <h5>Starts on</h5>
-                <span class="text-muted">{{slot.startingDate}}</span>
+                <span class="text-muted">{{getBeautifiedDate(slot.startingDate)}}</span>
             </div>
             <div *ngIf="slot.slotStatus == 'RUNNING'">
                 <h5>Ends on</h5>
-                <span class="text-muted">{{slot.endingDate}}</span>
+                <span class="text-muted">{{getBeautifiedDate(slot.endingDate)}}</span>
             </div>
             <div *ngIf="slot.slotStatus == 'EXPIRED'">
                 <h5>Ended on</h5>
-                <span class="text-muted">{{slot.endingDate}}</span>
+                <span class="text-muted">{{getBeautifiedDate(slot.endingDate)}}</span>
             </div>
             <div class="form-group mn-uploader" *ngIf="(slot.slotStatus == 'BOOKED')||(slot.slotStatus == 'REJECTED')">
                 <input class="form-control sl-form-control" (change)="onAdSelect($event,slot.vendorAdId)" type="file" hidden #adFileInput accept="image/*">

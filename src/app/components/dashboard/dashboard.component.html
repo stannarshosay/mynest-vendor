@@ -3,9 +3,12 @@
         <li>
             <div class="sl-alertsinfo">
                 <figure><img src="assets/images/insight/img-01.jpg" alt="img description"></figure>
-                <div class="sl-balanceheading">
-                    <h4>24 Unread</h4>
+                <div *ngIf="!isGettingMessageCount" class="sl-balanceheading">
+                    <h4>{{messageCount}} Unread</h4>
                     <span>New Messages</span>
+                </div>
+                <div *ngIf="isGettingMessageCount" class="sl-balanceheading">
+                    <mat-spinner [diameter]="30" class="m-auto"></mat-spinner>
                 </div>
             </div>
         </li>
@@ -21,18 +24,24 @@
         <li>
             <div class="sl-alertsinfo">
                 <figure><img src="assets/images/insight/img-03.jpg" alt="img description"></figure>
-                <div class="sl-balanceheading">
-                    <h4>16 Days left</h4>
+                <div *ngIf="!isGettingVendorDetails" class="sl-balanceheading">
+                    <h4>{{dateForExpiryAsString}} Days left</h4>
                     <span>Package Expiry</span>
+                </div>
+                <div *ngIf="isGettingVendorDetails" class="sl-balanceheading">
+                    <mat-spinner [diameter]="30" class="m-auto"></mat-spinner>
                 </div>
             </div>
         </li>
         <li>
             <div class="sl-alertsinfo">
                 <figure class="margin-reduced-five"><img src="assets/images/insight/like.jpg" alt="img description"></figure>
-                <div class="sl-balanceheading">
-                    <h4>2,706</h4>
+                <div *ngIf="!isGettingVendorDetails" class="sl-balanceheading">
+                    <h4 *ngIf="vendorDetails">{{vendorDetails.wishListCount}}</h4>
                     <span>Wishlisted</span>
+                </div>
+                <div *ngIf="isGettingVendorDetails" class="sl-balanceheading">
+                    <mat-spinner [diameter]="30" class="m-auto"></mat-spinner>
                 </div>
             </div>
         </li>
@@ -50,7 +59,7 @@
                         <h5>{{contact.customerName}}</h5>
                         <div fxLayout="column">
                             <h6><em>{{checkLength(contact.lastMessage?contact.lastMessage:'No messages yet')}}</em></h6>
-                            <small>{{contact.lastMessageTime?contact.lastMessageTime:''}}</small>
+                            <small>{{contact.lastMessageTime?getBeautifiedDate(contact.lastMessageTime):''}}</small>
                         </div>
                     </div>
                 </li>
@@ -74,10 +83,10 @@
                 <p class="text-center">No messages yet, start converstation!</p>
             </div>
             <div class="sl-messageUser__area sl-y-axis mCustomScrollbar" #chatbox>
-                <div [class.chat-quote]="message.messageType == 'FILE'" [class.sl-messageUser__area--left]="message.recipientId != vendorId" [class.sl-messageUser__area--right]="message.recipientId == vendorId" *ngFor="let message of messages">
+                <div [class.chat-quote]="message.messageType == 'FILE'" [class.sl-messageUser__area--left]="message.recipientId == vendorId" [class.sl-messageUser__area--right]="message.recipientId != vendorId" *ngFor="let message of messages">
                     <p *ngIf="message.messageType == 'TEXT'">{{message.content}}</p>
                     <p *ngIf="message.messageType == 'FILE'" matTooltip="click to download" (click)="downloadChatQuote(message.content)"><i class="ti-file"></i>&nbsp;&nbsp;{{message.content}}</p>
-                    <span>{{message.sentTime}}</span>
+                    <span>{{getBeautifiedDate(message.sentTime)}}</span>
                 </div>
             </div>
             <div class="sl-emoji" *ngIf="contacts.length">

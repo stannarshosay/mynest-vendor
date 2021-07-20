@@ -9,6 +9,7 @@
             <div class="sl-newAppointments__userDetail">
                 <div class="sl-newAppointments__userText">
                     <h5>{{requirement.categoryId}}</h5>
+                    <div *ngIf="requirement.subCategoryName" class="element-subcategory"><small>{{requirement.subCategoryName}}</small></div>
                     <p>{{requirement.createdDate}}</p>
                 </div>
             </div>
@@ -28,7 +29,7 @@
         </mat-expansion-panel-header>
         <div class="requirement-content" fxLayout="row" fxLayoutAlign="start">
             <img fxFlex="50" *ngIf="(requirement.picName)&&(requirement.picName.trim()!='')" src="https://mynestonline.com/collection/images/requirements/{{requirement.picName}}">
-            <div class="p-5" [attr.fxFlex]="((requirement.picName)&&(requirement.picName.trim()!=''))?50:100">
+            <div class="p-5 padding-mobile-one" [attr.fxFlex]="((requirement.picName)&&(requirement.picName.trim()!=''))?50:100">
                 <div class="requirement-contact" fxLayout="row" fxLayoutAlign="center center" *ngIf="(requirement.contact)&&(requirement.contact!='')">
                     <mat-icon>phone</mat-icon>
                     <span class="ml-1">{{requirement.contact}}</span>
