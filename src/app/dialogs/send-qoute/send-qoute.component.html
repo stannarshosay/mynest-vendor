@@ -1,7 +1,8 @@
 <h1 mat-dialog-title>Send quote as a file</h1>
 <mat-dialog-content class="mat-typography">
+    <mat-hint>max 3 mb</mat-hint>
     <div class="form-group mn-uploader" fxLayout="column">
-        <input class="form-control sl-form-control" (change)="onQuoteSelect($event,quoteFileInput)" type="file" hidden #quoteFileInput accept="application/pdf,application/msword,
+        <input class="form-control sl-form-control" (click)="quoteFileInput.value = null" (change)="onQuoteSelect($event,quoteFileInput)" type="file" hidden #quoteFileInput accept="application/pdf,application/msword,
         application/vnd.openxmlformats-officedocument.wordprocessingml.document">
         <span matRipple [matRippleColor]="color">
         <button [disabled]="isSending" class="btn sl-btn sl-btn-active" (click)="quoteFileInput.click()">Choose quote</button>

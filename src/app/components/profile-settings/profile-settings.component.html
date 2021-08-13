@@ -53,7 +53,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control sl-form-control" formControlName="about" type="text" placeholder="About*"></textarea>
+                                <mat-hint>{{companyDetailsForm.controls.about.value.length}}/{{maxChars}}</mat-hint>
+                                <textarea [maxLength]="maxChars" class="form-control sl-form-control" formControlName="about" type="text" placeholder="About*"></textarea>
                             </div>
                             <div class="form-group sl-profileSetting__socialmedia">
                                 <label class="sl-input-group sl-facebook">
@@ -166,23 +167,26 @@
                     <fieldset>
                         <div class="sl-form__wrap">
                             <div class="form-group mn-uploader">
-                                <input class="form-control sl-form-control" (change)="onProfileSelect($event)" type="file" hidden #profileFileInput accept="image/*">
+                                <mat-hint>max 800 kb, preffered dimension 255 x 180 in pixels</mat-hint>
+                                <input class="form-control sl-form-control" (click)="profileFileInput.value = null" (change)="onProfileSelect($event)" type="file" hidden #profileFileInput accept="image/*">
                                 <div matRipple [matRippleColor]="color">
                                     <button class="btn sl-btn sl-btn-active" (click)="profileFileInput.click()">Choose profile&nbsp;{{profileProgress==0?'':profileProgress+'%'}}</button>
                                 </div>
-                                <img *ngFor='let url of profilePreview' [src]="url" height="150" width="200px" style="margin: 3px;border-radius: 4px;"> <br *ngIf="profilePreview.length" />
+                                <img *ngFor='let url of profilePreview' [src]="url" height="120" width="200px" style="object-fit:cover;margin: 3px;border-radius: 4px;"> <br *ngIf="profilePreview.length" />
                                 <mat-progress-bar mode="determinate" *ngIf="profileProgress!=0" [value]="profileProgress"></mat-progress-bar>
                             </div>
+                            <mat-hint>max 500 kb, preffered dimension 96 x 96 in pixels</mat-hint>
                             <div class="form-group mn-uploader">
-                                <input class="form-control sl-form-control" (change)="onLogoSelect($event)" type="file" hidden #logoFileInput accept="image/*">
+                                <input class="form-control sl-form-control" (click)="logoFileInput.value = null" (change)="onLogoSelect($event)" type="file" hidden #logoFileInput accept="image/*">
                                 <div matRipple [matRippleColor]="color">
                                     <button class="btn sl-btn sl-btn-active" (click)="logoFileInput.click()">Choose logo&nbsp;{{logoProgress==0?'':logoProgress+'%'}}</button>
                                 </div>
-                                <img *ngFor='let url of logoPreview' [src]="url" height="150" width="200px" style="margin: 3px;border-radius: 4px;"> <br *ngIf="logoPreview.length" />
+                                <img *ngFor='let url of logoPreview' [src]="url" height="96" width="96px" style="object-fit:cover;margin: 3px;border-radius: 4px;"> <br *ngIf="logoPreview.length" />
                                 <mat-progress-bar mode="determinate" *ngIf="logoProgress!=0" [value]="logoProgress"></mat-progress-bar>
                             </div>
+                            <mat-hint>max 5 mb</mat-hint>
                             <div class="form-group mn-uploader">
-                                <input class="form-control sl-form-control" (change)="onBrochureSelect($event)" type="file" hidden #brochureFileInput accept="application/pdf,application/msword,
+                                <input class="form-control sl-form-control" (click)="brochureFileInput.value = null" (change)="onBrochureSelect($event)" type="file" hidden #brochureFileInput accept="application/pdf,application/msword,
                                 application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                                 <div matRipple [matRippleColor]="color">
                                     <button class="btn sl-btn sl-btn-active" (click)="brochureFileInput.click()">Choose brochure&nbsp;{{brochureProgress==0?'':brochureProgress+'%'}}</button>
@@ -190,12 +194,13 @@
                                 <p>{{brochureFilename}}</p>
                                 <mat-progress-bar mode="determinate" *ngIf="brochureProgress!=0" [value]="brochureProgress"></mat-progress-bar>
                             </div>
+                            <mat-hint>max {{galleryMaxCount}} pics of 1 mb each, preffered dimensions 510 x 439 in pixels</mat-hint>
                             <div class="form-group mn-uploader">
-                                <input class="form-control sl-form-control" (change)="onGallerySelect($event)" type="file" hidden #galleryFileInput multiple accept="image/*">
+                                <input class="form-control sl-form-control" (click)="galleryFileInput.value = null" (change)="onGallerySelect($event)" type="file" hidden #galleryFileInput multiple accept="image/*">
                                 <div matRipple [matRippleColor]="color">
                                     <button class="btn sl-btn sl-btn-active" (click)="galleryFileInput.click()">Choose gallery&nbsp;{{galleryProgress==0?'':galleryProgress+'%'}}</button>
                                 </div>
-                                <mat-hint>max {{galleryMaxCount}}</mat-hint><br>
+                                <small class="text-danger d-block" *ngFor="let info of galleryInfo">{{info}}</small><br>
                                 <mat-progress-bar mode="determinate" *ngIf="galleryProgress!=0" [value]="galleryProgress"></mat-progress-bar>
                             </div>
                             <mat-spinner [diameter]="30" class="m-auto" *ngIf="isGettingGalleryDetails"></mat-spinner>
@@ -204,7 +209,7 @@
                                     <div class="sl-row">
                                         <div class="sl-col-1-of-2 sl-col-md-1-of-3 sl-col-xl-1-of-4" *ngFor='let url of existingGallery'>
                                             <figure class="sl-galleryTab__gallery--item">
-                                                <img src="https://mynestonline.com/collection/images/gallery/{{url}}" alt="Image Description" height="150" width="200px">
+                                                <img style="object-fit: cover;" src="https://mynestonline.com/collection/images/gallery/{{url}}" alt="Image Description" height="170" width="146px">
                                                 <a class="sl-deleteImg" href="javascript:void(0);" (click)=deleteGalleryImage(url)><i class="fas fa-times"></i>Delete</a>
                                             </figure>
                                         </div>

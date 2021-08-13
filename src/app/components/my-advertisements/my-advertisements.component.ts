@@ -56,17 +56,46 @@ export class MyAdvertisementsComponent implements OnInit {
     });
   }
   onAdSelect(event:any,vendorAdId:string){
-    this.adFile = event.target.files[0];
-    if(this.adFile){  
-        const dialogRef = this.dialog.open(GetAdLinkComponent,{
-          disableClose:true         
-        });
-    
-        dialogRef.afterClosed().subscribe(result => {          
-          this.link = result;
-          this.uploadAdPic(vendorAdId);
-        });
-    }
+    var _size:any,name:string,file:File;
+    _size = event.target.files[0].size;
+    name = event.target.files[0].name; 
+    file = event.target.files[0]; 
+    var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+        while(_size>900)
+        {
+          _size/=1024;
+          i++;
+        }
+    if((((Math.round(_size*100)/100)>1)&&(i==2))||(i==3)){
+      this.showSnackbar("File size of "+name+" was larger than 1 MB",true,"okay");     
+    }else{
+      this.checkDimensions(file,vendorAdId);
+    }    
+  }
+  checkDimensions(file:File,vendorAdId:any){
+    var reader = new FileReader();   
+    reader.onload = (event:any) => {  
+      var img = new Image();    
+      img.onload = () => {
+          if((img.width == 300)&&(img.height == 250)){
+            this.adFile = file;
+            if(this.adFile){  
+                const dialogRef = this.dialog.open(GetAdLinkComponent,{
+                  disableClose:true         
+                });
+            
+                dialogRef.afterClosed().subscribe(result => {          
+                  this.link = result;
+                  this.uploadAdPic(vendorAdId);
+                });
+            }
+          }else{
+            this.showSnackbar("File dimension of "+file.name+" is incorrect",true,"okay");            
+          }
+      };
+      img.src = event.target.result;
+    } 
+    reader.readAsDataURL(file);
   }
   uploadAdPic(vendorAdId:string){
     this.adId = vendorAdId;

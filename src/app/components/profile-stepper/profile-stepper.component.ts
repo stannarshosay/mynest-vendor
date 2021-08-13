@@ -18,7 +18,8 @@ export class ProfileStepperComponent implements OnInit {
   
   color:string = "rgba(255,255,255,0.2)";
   darkColor:string = "rgba(0,0,0,0.1)";
-  
+  galleryInfo = [];
+  maxChars:string = "800";
   isAgent:boolean = false;
   agent:any = {};
   profileProgress:number = 0;
@@ -193,32 +194,144 @@ export class ProfileStepperComponent implements OnInit {
     })
   }
   onProfileSelect(event:any){
-    this.profileFile = event.target.files[0];
-    if(this.profileFile){  
-      this.uploadProfilePic(event);
-    }
+    var _size = event.target.files[0].size;
+    var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+        while(_size>900)
+        {
+          _size/=1024;
+          i++;
+        }
+    if((((Math.round(_size*100)/100)>800)&&(i==1))||(i==3)||(i==2)){
+      this.showSnackbar("File size is larger than 800 KB",true,"okay");
+    }else{
+      this.profileFile = event.target.files[0];
+      if(this.profileFile){  
+        this.uploadProfilePic(event);
+      }
+    } 
   }
   onLogoSelect(event:any){
-    this.logoFile = event.target.files[0];
-    if(this.logoFile){  
-      this.uploadLogo(event);
+    var _size = event.target.files[0].size;
+    var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+        while(_size>900)
+        {
+          _size/=1024;
+          i++;
+        }
+    if((((Math.round(_size*100)/100)>500)&&(i==1))||(i==3)||(i==2)){
+      this.showSnackbar("File size is larger than 500 KB",true,"okay");
+    }else{
+      this.logoFile = event.target.files[0];
+      if(this.logoFile){  
+        this.uploadLogo(event);
+      }  
     }    
   }
   onBrochureSelect(event:any){
-    this.brochureFile = event.target.files[0];
-    if(this.brochureFile){  
-      this.uploadBrochure(event);
+    var _size = event.target.files[0].size;
+    var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+        while(_size>900)
+        {
+          _size/=1024;
+          i++;
+        }
+    if((((Math.round(_size*100)/100)>5)&&(i==2))||(i==3)){
+      this.showSnackbar("File size is larger than 5 MB",true,"okay");
+    }else{
+      this.brochureFile = event.target.files[0];
+      if(this.brochureFile){  
+        this.uploadBrochure(event);
+      }   
     }     
   }
   onGallerySelect(event:any){
-    this.galleryFiles = event.target.files;
-    if(this.galleryFiles.length){
-      if(this.galleryFiles.length > this.galleryMaxCount){
-        this.showSnackbar("Oops! max "+this.galleryMaxCount+" more gallery images",true,"close");
-      }else{
-        this.uploadGalleryPic(event);       
+    var _size:any,name:string,file:File;
+    if(event.target.files.length > this.galleryMaxCount){
+      this.showSnackbar("Oops! max "+this.galleryMaxCount+" more gallery images",true,"close");
+    }else{
+      for(var j = 0; j<event.target.files.length;j++){
+        _size = event.target.files[j].size;
+        name = event.target.files[j].name; 
+        file = event.target.files[j]; 
+        var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+            while(_size>900)
+            {
+              _size/=1024;
+              i++;
+            }
+        if((((Math.round(_size*100)/100)>1)&&(i==2))||(i==3)){
+          this.galleryInfo.push("File size of "+name+" was larger than 1 MB");
+          setTimeout(()=>{
+            if(this.galleryInfo.length){
+              this.galleryInfo.shift();
+            }
+          },5000+(j*1000));
+        }else{
+          this.galleryFiles.push(file);
+        } 
       }
-    }    
+      this.showSnackbar("Please wait...",true,"okay");
+      setTimeout(()=>{
+        if(this.galleryFiles.length){ 
+          this.uploadGalleryPic(event);       
+        } 
+      },800);        
+    } 
+  }
+  //for dimension restricted gallery upload use below function
+  // onGallerySelect(event:any){
+  //   var _size:any,name:string,file:File;
+  //   if(event.target.files.length > this.galleryMaxCount){
+  //     this.showSnackbar("Oops! max "+this.galleryMaxCount+" more gallery images",true,"close");
+  //   }else{
+  //     for(var j = 0; j<event.target.files.length;j++){
+  //       _size = event.target.files[j].size;
+  //       name = event.target.files[j].name; 
+  //       file = event.target.files[j]; 
+  //       var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+  //           while(_size>900)
+  //           {
+  //             _size/=1024;
+  //             i++;
+  //           }
+  //       if((((Math.round(_size*100)/100)>1)&&(i==2))||(i==3)){
+  //         this.galleryInfo.push("File size of "+name+" was larger than 1 MB");
+  //         setTimeout(()=>{
+  //           if(this.galleryInfo.length){
+  //             this.galleryInfo.shift();
+  //           }
+  //         },5000+(j*1000));
+  //       }else{
+  //         this.checkDimensions(file,j);
+  //       } 
+  //     }
+  //     this.showSnackbar("Please wait...",true,"okay");
+  //     setTimeout(()=>{
+  //       if(this.galleryFiles.length){ 
+  //         this.uploadGalleryPic(event);       
+  //       } 
+  //     },800);        
+  //   } 
+  // }
+  checkDimensions(file:File,index:number){
+    var reader = new FileReader();   
+    reader.onload = (event:any) => {  
+      var img = new Image();    
+      img.onload = () => {
+          if((img.width == 439)&&(img.height == 510)){
+            this.galleryFiles.push(file);
+          }else{
+            this.galleryInfo.push("File dimension of "+file.name+" is incorrect");
+            setTimeout(()=>{
+              if(this.galleryInfo.length){
+                this.galleryInfo.shift();
+              }
+            },5000+(index*1000));
+          }
+      };
+      img.src = event.target.result;
+    } 
+    reader.readAsDataURL(file);
   }
   uploadProfilePic(fileEvent:any){
     this.isUploading =true;

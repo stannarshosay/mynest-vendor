@@ -46,8 +46,8 @@
                                         <div class="sl-dropdown__cart__description fullwidth">
                                             <a class="sl-cart-title" href="javascript:void(0);"><strong>{{message.customerName}}</strong></a>
                                             <div class="pt-1" fxLayout="row" fxLayoutAlign="space-between">
-                                                <a class="sl-cart-title" href="javascript:void(0);"><em>{{checkLength(message.lastMessage)}}</em></a>
-                                                <a class="sl-cart-title" href="javascript:void(0);">{{getBeautifiedDate(message.lastMessageTime)}}</a>
+                                                <a class="sl-cart-title" href="javascript:void(0);"><em>{{checkLength(message.lastMessage?message.lastMessage:'No messages yet')}}</em></a>
+                                                <a class="sl-cart-title" href="javascript:void(0);">{{message.lastMessageTime?getBeautifiedDate(message.lastMessageTime):''}}</a>
                                             </div>
                                         </div>
                                     </li>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="sl-user sl-userdropdown">
                         <a href="javascript:void(0);" matRipple [matRippleColor]="darkColor">
-                            <img style="width:40px;height:40px" src="https://mynestonline.com/collection/images/company-logo/{{getImagePath(vendorCompanyLogo)}}" alt="Image Description">
+                            <img style="width:40px;height:40px;object-fit: cover;" src="https://mynestonline.com/collection/images/company-logo/{{getImagePath(vendorCompanyLogo)}}" alt="Image Description">
                             <span class="sl-user__description"><em class="d-block">Hello!</em>{{vendorUsername}}</span>
                             <i class="ti-angle-down"></i>
                         </a>
@@ -172,8 +172,8 @@
                                         <div class="sl-dropdown__cart__description fullwidth">
                                             <a class="sl-cart-title" href="javascript:void(0);"><strong>{{message.customerName}}</strong></a>
                                             <div class="pt-1" fxLayout="row" fxLayoutAlign="space-between">
-                                                <a class="sl-cart-title" href="javascript:void(0);"><em>{{checkLength(message.lastMessage)}}</em></a>
-                                                <a class="sl-cart-title" href="javascript:void(0);">{{getBeautifiedDate(message.lastMessageTime)}}</a>
+                                                <a class="sl-cart-title" href="javascript:void(0);"><em>{{checkLength(message.lastMessage?message.lastMessage:'No messages yet')}}</em></a>
+                                                <a class="sl-cart-title" href="javascript:void(0);">{{message.lastMessageTime?getBeautifiedDate(message.lastMessageTime):''}}</a>
                                             </div>
                                         </div>
                                     </li>

@@ -94,7 +94,7 @@
                     <a href="javascript:void(0);" matTooltip="send quote" [class.disabled]="isUploading" (click)="quoteFileInput.click()" class="btn sl-btn sl-prepend">
                         <i class="ti-export"></i>
                     </a>
-                    <input (change)="onQuoteSelect($event)" type="file" hidden #quoteFileInput accept="application/pdf,application/msword,
+                    <input (change)="onQuoteSelect($event)" (click)="quoteFileInput.value = null" type="file" hidden #quoteFileInput accept="application/pdf,application/msword,
                     application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                     <input class="form-control sl-form-control sl-prepend" [formControl]="messageControl" type="text" placeholder="Type message here">
                     <a href="javascript:void(0);" (click)="sendMessage()" class="btn sl-btn sl-btn-active sl-append"><i class="lnr lnr-arrow-right"></i></a>

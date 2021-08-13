@@ -60,7 +60,18 @@ export class SendQouteComponent implements OnInit {
   }
 
   onQuoteSelect(event:any,fileInput:any){
-    this.quoteFile = event.target.files[0];
-    this.quoteFilename = this.quoteFile.name;
+    var _size = event.target.files[0].size;
+    var fSExt = new Array('Bytes', 'KB', 'MB', 'GB'),i=0;
+        while(_size>900)
+        {
+          _size/=1024;
+          i++;
+        }
+    if((((Math.round(_size*100)/100)>3)&&(i==2))||(i==3)){
+      this.showSnackbar("File size is larger than 3 MB",true,"okay");
+    }else{
+      this.quoteFile = event.target.files[0];
+      this.quoteFilename = this.quoteFile.name; 
+    }     
   }
 }

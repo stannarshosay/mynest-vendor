@@ -39,12 +39,15 @@
                 <h5>Ended on</h5>
                 <span class="text-muted">{{getBeautifiedDate(slot.endingDate)}}</span>
             </div>
-            <div class="form-group mn-uploader" *ngIf="(slot.slotStatus == 'BOOKED')||(slot.slotStatus == 'REJECTED')">
-                <input class="form-control sl-form-control" (change)="onAdSelect($event,slot.vendorAdId)" type="file" hidden #adFileInput accept="image/*">
-                <div matRipple [matRippleColor]="color">
-                    <button class="btn sl-btn sl-btn-active" (click)="adFileInput.click()">Upload Ad&nbsp;{{adProgress==0?'':adId==slot.vendorAdId?adProgress+'%':''}}</button>
+            <div *ngIf="(slot.slotStatus == 'BOOKED')||(slot.slotStatus == 'REJECTED')">
+                <small class="d-block" *ngIf="(slot.slotStatus == 'BOOKED')||(slot.slotStatus == 'REJECTED')">max 1 mb, 300 x 250 px</small>
+                <div class="form-group mn-uploader" *ngIf="(slot.slotStatus == 'BOOKED')||(slot.slotStatus == 'REJECTED')">
+                    <input class="form-control sl-form-control" (click)="adFileInput.value = null" (change)="onAdSelect($event,slot.vendorAdId)" type="file" hidden #adFileInput accept="image/*">
+                    <div matRipple [matRippleColor]="color">
+                        <button class="btn sl-btn sl-btn-active" (click)="adFileInput.click()">Upload Ad&nbsp;{{adProgress==0?'':adId==slot.vendorAdId?adProgress+'%':''}}</button>
+                    </div>
+                    <mat-progress-bar mode="determinate" *ngIf="(adProgress!=0)&&(adId==slot.vendorAdId)" [value]="adProgress"></mat-progress-bar>
                 </div>
-                <mat-progress-bar mode="determinate" *ngIf="(adProgress!=0)&&(adId==slot.vendorAdId)" [value]="adProgress"></mat-progress-bar>
             </div>
         </mat-expansion-panel-header>
         <div class="requirement-content" fxLayout="row" fxLayoutAlign="start">
@@ -53,5 +56,4 @@
             <p class="text-danger" *ngIf="(!slot.adPicturePath)||(slot.adPicturePath.trim()=='')">Please upload ad image!</p>
         </div>
     </mat-expansion-panel>
-
 </mat-accordion>
